@@ -22,7 +22,7 @@ dependencies: [
 Add the following line to your `Podfile`:
 
 ```text
-pod 'TinkoffInvestSwiftSDK', '~> 1.0.8'
+pod 'TinkoffInvestSwiftSDK', '~> 0.1.0'
 ```
 
 ## Compatibility
