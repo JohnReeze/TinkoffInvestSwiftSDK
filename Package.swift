@@ -8,7 +8,7 @@ let package = Package(
     platforms: [
         // Add support for all platforms starting from a specific version.
         .macOS(.v10_15),
-        .iOS(.v13),
+        .iOS(.v14),
         .watchOS(.v5),
         .tvOS(.v11)
     ],
@@ -19,7 +19,7 @@ let package = Package(
             targets: ["TinkoffInvestSDK"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/grpc/grpc-swift.git", from: "1.0.0"),
+        .package(url: "https://github.com/grpc/grpc-swift.git", from: "1.6.0"),
         .package(url: "https://github.com/vyshane/grpc-swift-combine.git", from: "1.0.8"),
     ],
     targets: [
