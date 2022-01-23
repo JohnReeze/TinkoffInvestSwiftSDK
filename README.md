@@ -13,7 +13,7 @@ Add the package dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/JohnReeze/TinkoffInvestSwiftSDK.git", from: "0.1.0"),
+  .package(url: "https://github.com/JohnReeze/TinkoffInvestSwiftSDK.git", from: "0.2.0"),
 ],
 ```
 
@@ -22,7 +22,7 @@ dependencies: [
 Add the following line to your `Podfile`:
 
 ```text
-pod 'TinkoffInvestSwiftSDK', '~> 0.1.0'
+pod 'TinkoffInvestSwiftSDK', :git => "https://github.com/JohnReeze/TinkoffInvestSwiftSDK.git", :tag => "0.2.0"
 ```
 
 ## Compatibility
