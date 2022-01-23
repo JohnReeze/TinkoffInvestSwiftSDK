@@ -32,6 +32,4 @@ Since this library integrates with Combine, it only works on platforms that supp
 Platform | Minimum Supported Version
 --- | ---
 macOS | 10.15 (Catalina)
-iOS & iPadOS | 13
-tvOS | 13
-watchOS | 6
+iOS & iPadOS | 15
