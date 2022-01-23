@@ -1,5 +1,5 @@
 # TinkoffInvestSwiftSDK
-![Swift Version](https://img.shields.io/badge/swift-5.0-orange) ![LISENCE](https://img.shields.io/badge/LICENSE-MIT-green)
+![Swift Version](https://img.shields.io/badge/swift-5.5-orange) ![LISENCE](https://img.shields.io/badge/LICENSE-MIT-green)
 
 TinkoffInvestSwiftSDK is a SDK for [Tinkoff Invest API](https://github.com/Tinkoff/investAPI) which works over gRPC. Main purpose of TinkoffInvestSwiftSDK is to simplify Tinkoff Invest API V2 usage in Swift.
 
