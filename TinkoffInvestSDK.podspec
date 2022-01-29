@@ -11,7 +11,7 @@ Pod::Spec.new do |spec|
   spec.author = { "Mikhail Monakov" => "mm.monakov@gmail.com" }
   spec.homepage = "https://github.com/JohnReeze/TinkoffInvestSwiftSDK"
 
-  spec.swift_version = "5.3"
+  spec.swift_version = "5.5"
   spec.ios.deployment_target = "15.0"
   spec.osx.deployment_target = "10.15"
   spec.source_files = 'Sources/TinkoffInvestSDK/**/*.swift'

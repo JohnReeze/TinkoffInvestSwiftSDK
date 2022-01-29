@@ -9,13 +9,11 @@ public class TinkoffInvestSDK {
 
     // Properties
     private let commonTokenProvider: TinkoffInvestTokenProvider
-    private let sandboxTokenProvider: TinkoffInvestTokenProvider?
 
     // MARK: - Initialization
 
-    public init(tokenProvider: TinkoffInvestTokenProvider, sandboxTokenProvider: TinkoffInvestTokenProvider? = nil) {
+    public init(tokenProvider: TinkoffInvestTokenProvider) {
         self.commonTokenProvider = tokenProvider
-        self.sandboxTokenProvider = sandboxTokenProvider
     }
 
     // MARK: - Services
@@ -25,4 +23,8 @@ public class TinkoffInvestSDK {
     public lazy var userService: UserService = GRPCUserService(tokenProvider: commonTokenProvider)
 
     public lazy var instrumentsService: InstrumentsService = GRPCInstrumentsService(tokenProvider: commonTokenProvider)
+
+    public lazy var marketDataService: MarketDataService = GRPCMarketDataService(tokenProvider: commonTokenProvider)
+
+    public lazy var marketDataServiceStream: MarketDataStreamService = GRPCMarketDataStreamService(tokenProvider: commonTokenProvider)
 }
