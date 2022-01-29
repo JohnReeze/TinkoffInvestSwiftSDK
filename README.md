@@ -16,7 +16,7 @@ import TinkoffInvestSDK
 
 let tokenProvider = DefaultTokenProvider(token: <your_token>) // generate your personal token for Tinkoff Invest API
 lazy var sdk = TinkoffInvestSDK(tokenProvider: tokenProviders)
-private var cancellables = Set<AnyCancellable>()
+var cancellables = Set<AnyCancellable>()
 
 sdk.userService.getAccounts().flatMap {
    sdk.portfolioService.getPortfolio(accountID: $0.accounts.first!.id)
