@@ -7,7 +7,7 @@ TinkoffInvestSwiftSDK is a SDK for [Tinkoff Invest API V2](https://github.com/Ti
 ### gRPC + Swift Combine 
 
 As [Tinkoff Invest API V2](https://github.com/Tinkoff/investAPI) works over gRPC and therefore all network layer and domain models can be generated using [grpc-swift](https://github.com/grpc/grpc-swift). But gRPC's implementation generated in Swift is quite unpleasant to work with. Also it takes quite a time to setup generation, setup all Swift gRPC stack just to make one request. 
-TinkoffInvestSwiftSDK provides more Swifty interfaces over Tinkoff API gRPC version so you can start using it with a few lines of code:
+TinkoffInvestSwiftSDK provides more Swifty interfaces for Tinkoff API gRPC implematation so you can start using it with a few lines of code:
 
 ```swift
 
