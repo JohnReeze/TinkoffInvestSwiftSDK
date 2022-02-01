@@ -135,16 +135,16 @@ public enum SubscriptionStatus: SwiftProtobuf.Enum {
   ///Инструмент не найден.
   case instrumentNotFound // = 2
 
-  ///Некорректный статус подписки, список возможных значений: [SubscriptionAction](/investAPI/marketdata#subscriptionaction)
+  ///Некорректный статус подписки, список возможных значений: [SubscriptionAction](https://tinkoff.github.io/investAPI/marketdata#subscriptionaction)
   case subscriptionActionIsInvalid // = 3
 
   ///Некорректная глубина стакана, доступные значения: 10, 20, 30, 40, 50.
   case depthIsInvalid // = 4
 
-  ///Некорректный интервал свечей, список возможных значений: [SubscriptionInterval](/investAPI/marketdata#subscriptioninterval)
+  ///Некорректный интервал свечей, список возможных значений: [SubscriptionInterval](https://tinkoff.github.io/investAPI/marketdata#subscriptioninterval)
   case intervalIsInvalid // = 5
 
-  ///Превышен лимит подписок в рамках стрима, подробнее: [Лимитная политика](/investAPI/limits/)
+  ///Превышен лимит подписок в рамках стрима, подробнее: [Лимитная политика](https://tinkoff.github.io/investAPI/limits/)
   case limitIsExceeded // = 6
 
   ///Внутренняя ошибка сервиса.
@@ -612,7 +612,7 @@ public struct SubscribeCandlesResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Уникальный идентификатор запроса, подробнее: [tracking_id](/investAPI/grpc#tracking-id)
+  ///Уникальный идентификатор запроса, подробнее: [tracking_id](https://tinkoff.github.io/investAPI/grpc#tracking-id)
   public var trackingID: String = String()
 
   ///Массив статусов подписки на свечи.
@@ -683,7 +683,7 @@ public struct SubscribeOrderBookResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Уникальный идентификатор запроса, подробнее: [tracking_id](/investAPI/grpc#tracking-id)
+  ///Уникальный идентификатор запроса, подробнее: [tracking_id](https://tinkoff.github.io/investAPI/grpc#tracking-id)
   public var trackingID: String = String()
 
   ///Массив статусов подписки на стаканы.
@@ -751,7 +751,7 @@ public struct SubscribeTradesResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Уникальный идентификатор запроса, подробнее: [tracking_id](/investAPI/grpc#tracking-id)
+  ///Уникальный идентификатор запроса, подробнее: [tracking_id](https://tinkoff.github.io/investAPI/grpc#tracking-id)
   public var trackingID: String = String()
 
   ///Массив статусов подписки на поток сделок.
@@ -816,7 +816,7 @@ public struct SubscribeInfoResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Уникальный идентификатор запроса, подробнее: [tracking_id](/investAPI/grpc#tracking-id)
+  ///Уникальный идентификатор запроса, подробнее: [tracking_id](https://tinkoff.github.io/investAPI/grpc#tracking-id)
   public var trackingID: String = String()
 
   ///Массив статусов подписки на торговый статус.
@@ -1010,21 +1010,21 @@ public struct Trade {
   public var quantity: Int64 = 0
 
   ///Время сделки в часовом поясе UTC по времени биржи.
-  public var timestamp: SwiftProtobuf.Google_Protobuf_Timestamp {
-    get {return _timestamp ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
-    set {_timestamp = newValue}
+  public var time: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _time ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_time = newValue}
   }
-  /// Returns true if `timestamp` has been explicitly set.
-  public var hasTimestamp: Bool {return self._timestamp != nil}
-  /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
-  public mutating func clearTimestamp() {self._timestamp = nil}
+  /// Returns true if `time` has been explicitly set.
+  public var hasTime: Bool {return self._time != nil}
+  /// Clears the value of `time`. Subsequent reads from it will return its default value.
+  public mutating func clearTime() {self._time = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _price: Quotation? = nil
-  fileprivate var _timestamp: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+  fileprivate var _time: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
 ///Пакет изменения торгового статуса.
@@ -1039,9 +1039,21 @@ public struct TradingStatus {
   ///Статус торговли инструментом.
   public var tradingStatus: SecurityTradingStatus = .unspecified
 
+  ///Время изменения торгового статуса в часовом поясе UTC.
+  public var time: SwiftProtobuf.Google_Protobuf_Timestamp {
+    get {return _time ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
+    set {_time = newValue}
+  }
+  /// Returns true if `time` has been explicitly set.
+  public var hasTime: Bool {return self._time != nil}
+  /// Clears the value of `time`. Subsequent reads from it will return its default value.
+  public mutating func clearTime() {self._time = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
+
+  fileprivate var _time: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
 }
 
 ///Запрос исторических свечей.
@@ -2485,7 +2497,7 @@ extension Trade: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
     2: .same(proto: "direction"),
     3: .same(proto: "price"),
     4: .same(proto: "quantity"),
-    5: .same(proto: "timestamp"),
+    5: .same(proto: "time"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -2498,7 +2510,7 @@ extension Trade: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
       case 2: try { try decoder.decodeSingularEnumField(value: &self.direction) }()
       case 3: try { try decoder.decodeSingularMessageField(value: &self._price) }()
       case 4: try { try decoder.decodeSingularInt64Field(value: &self.quantity) }()
-      case 5: try { try decoder.decodeSingularMessageField(value: &self._timestamp) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._time) }()
       default: break
       }
     }
@@ -2521,7 +2533,7 @@ extension Trade: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
     if self.quantity != 0 {
       try visitor.visitSingularInt64Field(value: self.quantity, fieldNumber: 4)
     }
-    try { if let v = self._timestamp {
+    try { if let v = self._time {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
     } }()
     try unknownFields.traverse(visitor: &visitor)
@@ -2532,7 +2544,7 @@ extension Trade: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
     if lhs.direction != rhs.direction {return false}
     if lhs._price != rhs._price {return false}
     if lhs.quantity != rhs.quantity {return false}
-    if lhs._timestamp != rhs._timestamp {return false}
+    if lhs._time != rhs._time {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -2543,6 +2555,7 @@ extension TradingStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "figi"),
     2: .standard(proto: "trading_status"),
+    3: .same(proto: "time"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -2553,24 +2566,33 @@ extension TradingStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.figi) }()
       case 2: try { try decoder.decodeSingularEnumField(value: &self.tradingStatus) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._time) }()
       default: break
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
     if !self.figi.isEmpty {
       try visitor.visitSingularStringField(value: self.figi, fieldNumber: 1)
     }
     if self.tradingStatus != .unspecified {
       try visitor.visitSingularEnumField(value: self.tradingStatus, fieldNumber: 2)
     }
+    try { if let v = self._time {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: TradingStatus, rhs: TradingStatus) -> Bool {
     if lhs.figi != rhs.figi {return false}
     if lhs.tradingStatus != rhs.tradingStatus {return false}
+    if lhs._time != rhs._time {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

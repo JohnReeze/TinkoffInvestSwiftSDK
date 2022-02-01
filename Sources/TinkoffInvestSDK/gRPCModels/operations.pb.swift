@@ -130,7 +130,7 @@ public enum OperationType: SwiftProtobuf.Enum {
   case inputSecurities // = 17
 
   ///Продажа в результате Margin-call
-  case sellMarjin // = 18
+  case sellMargin // = 18
 
   ///Удержание комиссии за операцию
   case brokerFee // = 19
@@ -154,10 +154,10 @@ public enum OperationType: SwiftProtobuf.Enum {
   case dividendTransfer // = 25
 
   ///Зачисление вариационной маржи
-  case accruingVarmarjin // = 26
+  case accruingVarmargin // = 26
 
   ///Списание вариационной маржи
-  case writingOffVarmarjin // = 27
+  case writingOffVarmargin // = 27
 
   ///Покупка в рамках экспирации фьючерсного контракта
   case deliveryBuy // = 28
@@ -232,7 +232,7 @@ public enum OperationType: SwiftProtobuf.Enum {
     case 15: self = .buy
     case 16: self = .buyCard
     case 17: self = .inputSecurities
-    case 18: self = .sellMarjin
+    case 18: self = .sellMargin
     case 19: self = .brokerFee
     case 20: self = .buyMargin
     case 21: self = .dividend
@@ -240,8 +240,8 @@ public enum OperationType: SwiftProtobuf.Enum {
     case 23: self = .coupon
     case 24: self = .successFee
     case 25: self = .dividendTransfer
-    case 26: self = .accruingVarmarjin
-    case 27: self = .writingOffVarmarjin
+    case 26: self = .accruingVarmargin
+    case 27: self = .writingOffVarmargin
     case 28: self = .deliveryBuy
     case 29: self = .deliverySell
     case 30: self = .trackMfee
@@ -282,7 +282,7 @@ public enum OperationType: SwiftProtobuf.Enum {
     case .buy: return 15
     case .buyCard: return 16
     case .inputSecurities: return 17
-    case .sellMarjin: return 18
+    case .sellMargin: return 18
     case .brokerFee: return 19
     case .buyMargin: return 20
     case .dividend: return 21
@@ -290,8 +290,8 @@ public enum OperationType: SwiftProtobuf.Enum {
     case .coupon: return 23
     case .successFee: return 24
     case .dividendTransfer: return 25
-    case .accruingVarmarjin: return 26
-    case .writingOffVarmarjin: return 27
+    case .accruingVarmargin: return 26
+    case .writingOffVarmargin: return 27
     case .deliveryBuy: return 28
     case .deliverySell: return 29
     case .trackMfee: return 30
@@ -337,7 +337,7 @@ extension OperationType: CaseIterable {
     .buy,
     .buyCard,
     .inputSecurities,
-    .sellMarjin,
+    .sellMargin,
     .brokerFee,
     .buyMargin,
     .dividend,
@@ -345,8 +345,8 @@ extension OperationType: CaseIterable {
     .coupon,
     .successFee,
     .dividendTransfer,
-    .accruingVarmarjin,
-    .writingOffVarmarjin,
+    .accruingVarmargin,
+    .writingOffVarmargin,
     .deliveryBuy,
     .deliverySell,
     .trackMfee,
@@ -588,7 +588,7 @@ public struct PortfolioResponse {
   /// Clears the value of `totalAmountCurrencies`. Subsequent reads from it will return its default value.
   public mutating func clearTotalAmountCurrencies() {_uniqueStorage()._totalAmountCurrencies = nil}
 
-  ///Общая стоимость валют в портфеле в рублях
+  ///Общая стоимость фьючерсов в портфеле в рублях
   public var totalAmountFutures: MoneyValue {
     get {return _storage._totalAmountFutures ?? MoneyValue()}
     set {_uniqueStorage()._totalAmountFutures = newValue}
@@ -599,10 +599,14 @@ public struct PortfolioResponse {
   public mutating func clearTotalAmountFutures() {_uniqueStorage()._totalAmountFutures = nil}
 
   ///Текущая доходность портфеля
-  public var expectedYield: Float {
-    get {return _storage._expectedYield}
+  public var expectedYield: Quotation {
+    get {return _storage._expectedYield ?? Quotation()}
     set {_uniqueStorage()._expectedYield = newValue}
   }
+  /// Returns true if `expectedYield` has been explicitly set.
+  public var hasExpectedYield: Bool {return _storage._expectedYield != nil}
+  /// Clears the value of `expectedYield`. Subsequent reads from it will return its default value.
+  public mutating func clearExpectedYield() {_uniqueStorage()._expectedYield = nil}
 
   ///Список позиций портфеля
   public var positions: [PortfolioPosition] {
@@ -648,6 +652,9 @@ public struct PositionsResponse {
 
   ///Признак идущей в данный момент выгрузки лимитов
   public var limitsLoadingInProgress: Bool = false
+
+  ///Список фьючерсов портфеля
+  public var futures: [PositionsFutures] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -695,54 +702,82 @@ public struct PortfolioPosition {
   // methods supported on all messages.
 
   ///Figi-идентификатора инструмента
-  public var figi: String = String()
+  public var figi: String {
+    get {return _storage._figi}
+    set {_uniqueStorage()._figi = newValue}
+  }
 
   ///Тип инструмента
-  public var instrumentType: String = String()
+  public var instrumentType: String {
+    get {return _storage._instrumentType}
+    set {_uniqueStorage()._instrumentType = newValue}
+  }
 
-  ///Количество лотов в портфеле
-  public var quantity: Float = 0
+  ///Количество инструмента в портфеле в штуках
+  public var quantity: Quotation {
+    get {return _storage._quantity ?? Quotation()}
+    set {_uniqueStorage()._quantity = newValue}
+  }
+  /// Returns true if `quantity` has been explicitly set.
+  public var hasQuantity: Bool {return _storage._quantity != nil}
+  /// Clears the value of `quantity`. Subsequent reads from it will return its default value.
+  public mutating func clearQuantity() {_uniqueStorage()._quantity = nil}
 
   ///Средняя цена лота в позиции
   public var averagePositionPrice: MoneyValue {
-    get {return _averagePositionPrice ?? MoneyValue()}
-    set {_averagePositionPrice = newValue}
+    get {return _storage._averagePositionPrice ?? MoneyValue()}
+    set {_uniqueStorage()._averagePositionPrice = newValue}
   }
   /// Returns true if `averagePositionPrice` has been explicitly set.
-  public var hasAveragePositionPrice: Bool {return self._averagePositionPrice != nil}
+  public var hasAveragePositionPrice: Bool {return _storage._averagePositionPrice != nil}
   /// Clears the value of `averagePositionPrice`. Subsequent reads from it will return its default value.
-  public mutating func clearAveragePositionPrice() {self._averagePositionPrice = nil}
+  public mutating func clearAveragePositionPrice() {_uniqueStorage()._averagePositionPrice = nil}
 
   ///Текущая рассчитанная доходность
-  public var expectedYield: Float = 0
+  public var expectedYield: Quotation {
+    get {return _storage._expectedYield ?? Quotation()}
+    set {_uniqueStorage()._expectedYield = newValue}
+  }
+  /// Returns true if `expectedYield` has been explicitly set.
+  public var hasExpectedYield: Bool {return _storage._expectedYield != nil}
+  /// Clears the value of `expectedYield`. Subsequent reads from it will return its default value.
+  public mutating func clearExpectedYield() {_uniqueStorage()._expectedYield = nil}
 
   /// Текущий НКД
   public var currentNkd: MoneyValue {
-    get {return _currentNkd ?? MoneyValue()}
-    set {_currentNkd = newValue}
+    get {return _storage._currentNkd ?? MoneyValue()}
+    set {_uniqueStorage()._currentNkd = newValue}
   }
   /// Returns true if `currentNkd` has been explicitly set.
-  public var hasCurrentNkd: Bool {return self._currentNkd != nil}
+  public var hasCurrentNkd: Bool {return _storage._currentNkd != nil}
   /// Clears the value of `currentNkd`. Subsequent reads from it will return its default value.
-  public mutating func clearCurrentNkd() {self._currentNkd = nil}
+  public mutating func clearCurrentNkd() {_uniqueStorage()._currentNkd = nil}
 
   ///Средняя цена лота в позиции в пунктах (для фьючерсов)
   public var averagePositionPricePt: Quotation {
-    get {return _averagePositionPricePt ?? Quotation()}
-    set {_averagePositionPricePt = newValue}
+    get {return _storage._averagePositionPricePt ?? Quotation()}
+    set {_uniqueStorage()._averagePositionPricePt = newValue}
   }
   /// Returns true if `averagePositionPricePt` has been explicitly set.
-  public var hasAveragePositionPricePt: Bool {return self._averagePositionPricePt != nil}
+  public var hasAveragePositionPricePt: Bool {return _storage._averagePositionPricePt != nil}
   /// Clears the value of `averagePositionPricePt`. Subsequent reads from it will return its default value.
-  public mutating func clearAveragePositionPricePt() {self._averagePositionPricePt = nil}
+  public mutating func clearAveragePositionPricePt() {_uniqueStorage()._averagePositionPricePt = nil}
+
+  ///Текущая цена инструмента
+  public var currentPrice: MoneyValue {
+    get {return _storage._currentPrice ?? MoneyValue()}
+    set {_uniqueStorage()._currentPrice = newValue}
+  }
+  /// Returns true if `currentPrice` has been explicitly set.
+  public var hasCurrentPrice: Bool {return _storage._currentPrice != nil}
+  /// Clears the value of `currentPrice`. Subsequent reads from it will return its default value.
+  public mutating func clearCurrentPrice() {_uniqueStorage()._currentPrice = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _averagePositionPrice: MoneyValue? = nil
-  fileprivate var _currentNkd: MoneyValue? = nil
-  fileprivate var _averagePositionPricePt: Quotation? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 ///Баланс позиции ценной бумаги.
@@ -752,6 +787,26 @@ public struct PositionsSecurities {
   // methods supported on all messages.
 
   ///Figi-идентификатор бумаги
+  public var figi: String = String()
+
+  ///Заблокировано
+  public var blocked: Int64 = 0
+
+  ///Текущий баланс
+  public var balance: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+///Баланс фьючерса.
+public struct PositionsFutures {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  ///Figi-идентификатор фьючерса
   public var figi: String = String()
 
   ///Заблокировано
@@ -797,7 +852,7 @@ extension OperationType: SwiftProtobuf._ProtoNameProviding {
     15: .same(proto: "OPERATION_TYPE_BUY"),
     16: .same(proto: "OPERATION_TYPE_BUY_CARD"),
     17: .same(proto: "OPERATION_TYPE_INPUT_SECURITIES"),
-    18: .same(proto: "OPERATION_TYPE_SELL_MARJIN"),
+    18: .same(proto: "OPERATION_TYPE_SELL_MARGIN"),
     19: .same(proto: "OPERATION_TYPE_BROKER_FEE"),
     20: .same(proto: "OPERATION_TYPE_BUY_MARGIN"),
     21: .same(proto: "OPERATION_TYPE_DIVIDEND"),
@@ -805,8 +860,8 @@ extension OperationType: SwiftProtobuf._ProtoNameProviding {
     23: .same(proto: "OPERATION_TYPE_COUPON"),
     24: .same(proto: "OPERATION_TYPE_SUCCESS_FEE"),
     25: .same(proto: "OPERATION_TYPE_DIVIDEND_TRANSFER"),
-    26: .same(proto: "OPERATION_TYPE_ACCRUING_VARMARJIN"),
-    27: .same(proto: "OPERATION_TYPE_WRITING_OFF_VARMARJIN"),
+    26: .same(proto: "OPERATION_TYPE_ACCRUING_VARMARGIN"),
+    27: .same(proto: "OPERATION_TYPE_WRITING_OFF_VARMARGIN"),
     28: .same(proto: "OPERATION_TYPE_DELIVERY_BUY"),
     29: .same(proto: "OPERATION_TYPE_DELIVERY_SELL"),
     30: .same(proto: "OPERATION_TYPE_TRACK_MFEE"),
@@ -1132,7 +1187,7 @@ extension PortfolioResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _totalAmountEtf: MoneyValue? = nil
     var _totalAmountCurrencies: MoneyValue? = nil
     var _totalAmountFutures: MoneyValue? = nil
-    var _expectedYield: Float = 0
+    var _expectedYield: Quotation? = nil
     var _positions: [PortfolioPosition] = []
 
     static let defaultInstance = _StorageClass()
@@ -1170,7 +1225,7 @@ extension PortfolioResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 3: try { try decoder.decodeSingularMessageField(value: &_storage._totalAmountEtf) }()
         case 4: try { try decoder.decodeSingularMessageField(value: &_storage._totalAmountCurrencies) }()
         case 5: try { try decoder.decodeSingularMessageField(value: &_storage._totalAmountFutures) }()
-        case 6: try { try decoder.decodeSingularFloatField(value: &_storage._expectedYield) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._expectedYield) }()
         case 7: try { try decoder.decodeRepeatedMessageField(value: &_storage._positions) }()
         default: break
         }
@@ -1199,9 +1254,9 @@ extension PortfolioResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       try { if let v = _storage._totalAmountFutures {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
       } }()
-      if _storage._expectedYield != 0 {
-        try visitor.visitSingularFloatField(value: _storage._expectedYield, fieldNumber: 6)
-      }
+      try { if let v = _storage._expectedYield {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
       if !_storage._positions.isEmpty {
         try visitor.visitRepeatedMessageField(value: _storage._positions, fieldNumber: 7)
       }
@@ -1269,6 +1324,7 @@ extension PositionsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     2: .same(proto: "blocked"),
     3: .same(proto: "securities"),
     4: .standard(proto: "limits_loading_in_progress"),
+    5: .same(proto: "futures"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1281,6 +1337,7 @@ extension PositionsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       case 2: try { try decoder.decodeRepeatedMessageField(value: &self.blocked) }()
       case 3: try { try decoder.decodeRepeatedMessageField(value: &self.securities) }()
       case 4: try { try decoder.decodeSingularBoolField(value: &self.limitsLoadingInProgress) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.futures) }()
       default: break
       }
     }
@@ -1299,6 +1356,9 @@ extension PositionsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if self.limitsLoadingInProgress != false {
       try visitor.visitSingularBoolField(value: self.limitsLoadingInProgress, fieldNumber: 4)
     }
+    if !self.futures.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.futures, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1307,6 +1367,7 @@ extension PositionsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     if lhs.blocked != rhs.blocked {return false}
     if lhs.securities != rhs.securities {return false}
     if lhs.limitsLoadingInProgress != rhs.limitsLoadingInProgress {return false}
+    if lhs.futures != rhs.futures {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1398,63 +1459,115 @@ extension PortfolioPosition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     5: .standard(proto: "expected_yield"),
     6: .standard(proto: "current_nkd"),
     7: .standard(proto: "average_position_price_pt"),
+    8: .standard(proto: "current_price"),
   ]
 
+  fileprivate class _StorageClass {
+    var _figi: String = String()
+    var _instrumentType: String = String()
+    var _quantity: Quotation? = nil
+    var _averagePositionPrice: MoneyValue? = nil
+    var _expectedYield: Quotation? = nil
+    var _currentNkd: MoneyValue? = nil
+    var _averagePositionPricePt: Quotation? = nil
+    var _currentPrice: MoneyValue? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _figi = source._figi
+      _instrumentType = source._instrumentType
+      _quantity = source._quantity
+      _averagePositionPrice = source._averagePositionPrice
+      _expectedYield = source._expectedYield
+      _currentNkd = source._currentNkd
+      _averagePositionPricePt = source._averagePositionPricePt
+      _currentPrice = source._currentPrice
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.figi) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.instrumentType) }()
-      case 3: try { try decoder.decodeSingularFloatField(value: &self.quantity) }()
-      case 4: try { try decoder.decodeSingularMessageField(value: &self._averagePositionPrice) }()
-      case 5: try { try decoder.decodeSingularFloatField(value: &self.expectedYield) }()
-      case 6: try { try decoder.decodeSingularMessageField(value: &self._currentNkd) }()
-      case 7: try { try decoder.decodeSingularMessageField(value: &self._averagePositionPricePt) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._figi) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._instrumentType) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._quantity) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._averagePositionPrice) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._expectedYield) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._currentNkd) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._averagePositionPricePt) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._currentPrice) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.figi.isEmpty {
-      try visitor.visitSingularStringField(value: self.figi, fieldNumber: 1)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._figi.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._figi, fieldNumber: 1)
+      }
+      if !_storage._instrumentType.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._instrumentType, fieldNumber: 2)
+      }
+      try { if let v = _storage._quantity {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._averagePositionPrice {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._expectedYield {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._currentNkd {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._averagePositionPricePt {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._currentPrice {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
     }
-    if !self.instrumentType.isEmpty {
-      try visitor.visitSingularStringField(value: self.instrumentType, fieldNumber: 2)
-    }
-    if self.quantity != 0 {
-      try visitor.visitSingularFloatField(value: self.quantity, fieldNumber: 3)
-    }
-    try { if let v = self._averagePositionPrice {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    } }()
-    if self.expectedYield != 0 {
-      try visitor.visitSingularFloatField(value: self.expectedYield, fieldNumber: 5)
-    }
-    try { if let v = self._currentNkd {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    } }()
-    try { if let v = self._averagePositionPricePt {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: PortfolioPosition, rhs: PortfolioPosition) -> Bool {
-    if lhs.figi != rhs.figi {return false}
-    if lhs.instrumentType != rhs.instrumentType {return false}
-    if lhs.quantity != rhs.quantity {return false}
-    if lhs._averagePositionPrice != rhs._averagePositionPrice {return false}
-    if lhs.expectedYield != rhs.expectedYield {return false}
-    if lhs._currentNkd != rhs._currentNkd {return false}
-    if lhs._averagePositionPricePt != rhs._averagePositionPricePt {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._figi != rhs_storage._figi {return false}
+        if _storage._instrumentType != rhs_storage._instrumentType {return false}
+        if _storage._quantity != rhs_storage._quantity {return false}
+        if _storage._averagePositionPrice != rhs_storage._averagePositionPrice {return false}
+        if _storage._expectedYield != rhs_storage._expectedYield {return false}
+        if _storage._currentNkd != rhs_storage._currentNkd {return false}
+        if _storage._averagePositionPricePt != rhs_storage._averagePositionPricePt {return false}
+        if _storage._currentPrice != rhs_storage._currentPrice {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1496,6 +1609,50 @@ extension PositionsSecurities: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   }
 
   public static func ==(lhs: PositionsSecurities, rhs: PositionsSecurities) -> Bool {
+    if lhs.figi != rhs.figi {return false}
+    if lhs.blocked != rhs.blocked {return false}
+    if lhs.balance != rhs.balance {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension PositionsFutures: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PositionsFutures"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "figi"),
+    2: .same(proto: "blocked"),
+    3: .same(proto: "balance"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.figi) }()
+      case 2: try { try decoder.decodeSingularInt64Field(value: &self.blocked) }()
+      case 3: try { try decoder.decodeSingularInt64Field(value: &self.balance) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.figi.isEmpty {
+      try visitor.visitSingularStringField(value: self.figi, fieldNumber: 1)
+    }
+    if self.blocked != 0 {
+      try visitor.visitSingularInt64Field(value: self.blocked, fieldNumber: 2)
+    }
+    if self.balance != 0 {
+      try visitor.visitSingularInt64Field(value: self.balance, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: PositionsFutures, rhs: PositionsFutures) -> Bool {
     if lhs.figi != rhs.figi {return false}
     if lhs.blocked != rhs.blocked {return false}
     if lhs.balance != rhs.balance {return false}

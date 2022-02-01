@@ -20,7 +20,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-///Тип идентификатора инструмента. Подробнее об идентификации инструментов: [Идентификация инструментов](/investAPI/faq_identification/)
+///Тип идентификатора инструмента. Подробнее об идентификации инструментов: [Идентификация инструментов](https://tinkoff.github.io/investAPI/faq_identification/)
 public enum InstrumentIdType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -78,7 +78,7 @@ public enum InstrumentStatus: SwiftProtobuf.Enum {
   ///Значение не определено.
   case unspecified // = 0
 
-  ///Базовый список инструментов (по умолчанию).
+  ///Базовый список инструментов (по умолчанию). Инструменты доступные для торговли через TINKOFF INVEST API.
   case base // = 1
 
   ///Список всех инструментов.
@@ -353,7 +353,7 @@ public struct InstrumentRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// Тип идентификатора инструмента. Возможные значения: figi, ticker, isin. Подробнее об идентификации инструментов: [Идентификация инструментов](/investAPI/faq_identification/)
+  /// Тип идентификатора инструмента. Возможные значения: figi, ticker, isin. Подробнее об идентификации инструментов: [Идентификация инструментов](https://tinkoff.github.io/investAPI/faq_identification/)
   public var idType: InstrumentIdType = .instrumentIDUnspecified
 
   /// Идентификатор class_code. Обязателен при id_type = ticker.
@@ -596,7 +596,7 @@ public struct Bond {
     set {_uniqueStorage()._isin = newValue}
   }
 
-  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](/investAPI/glossary#lot)
+  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](https://tinkoff.github.io/investAPI/glossary#lot)
   public var lot: Int32 {
     get {return _storage._lot}
     set {_uniqueStorage()._lot = newValue}
@@ -609,40 +609,64 @@ public struct Bond {
   }
 
   ///Коэффициент ставки риска длинной позиции по инструменту.
-  public var klong: Double {
-    get {return _storage._klong}
+  public var klong: Quotation {
+    get {return _storage._klong ?? Quotation()}
     set {_uniqueStorage()._klong = newValue}
   }
+  /// Returns true if `klong` has been explicitly set.
+  public var hasKlong: Bool {return _storage._klong != nil}
+  /// Clears the value of `klong`. Subsequent reads from it will return its default value.
+  public mutating func clearKlong() {_uniqueStorage()._klong = nil}
 
   ///Коэффициент ставки риска короткой позиции по инструменту.
-  public var kshort: Double {
-    get {return _storage._kshort}
+  public var kshort: Quotation {
+    get {return _storage._kshort ?? Quotation()}
     set {_uniqueStorage()._kshort = newValue}
   }
+  /// Returns true if `kshort` has been explicitly set.
+  public var hasKshort: Bool {return _storage._kshort != nil}
+  /// Clears the value of `kshort`. Subsequent reads from it will return its default value.
+  public mutating func clearKshort() {_uniqueStorage()._kshort = nil}
 
   ///Ставка риска минимальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlong: Double {
-    get {return _storage._dlong}
+  public var dlong: Quotation {
+    get {return _storage._dlong ?? Quotation()}
     set {_uniqueStorage()._dlong = newValue}
   }
+  /// Returns true if `dlong` has been explicitly set.
+  public var hasDlong: Bool {return _storage._dlong != nil}
+  /// Clears the value of `dlong`. Subsequent reads from it will return its default value.
+  public mutating func clearDlong() {_uniqueStorage()._dlong = nil}
 
   ///Ставка риска минимальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshort: Double {
-    get {return _storage._dshort}
+  public var dshort: Quotation {
+    get {return _storage._dshort ?? Quotation()}
     set {_uniqueStorage()._dshort = newValue}
   }
+  /// Returns true if `dshort` has been explicitly set.
+  public var hasDshort: Bool {return _storage._dshort != nil}
+  /// Clears the value of `dshort`. Subsequent reads from it will return its default value.
+  public mutating func clearDshort() {_uniqueStorage()._dshort = nil}
 
   ///Ставка риска начальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlongMin: Double {
-    get {return _storage._dlongMin}
+  public var dlongMin: Quotation {
+    get {return _storage._dlongMin ?? Quotation()}
     set {_uniqueStorage()._dlongMin = newValue}
   }
+  /// Returns true if `dlongMin` has been explicitly set.
+  public var hasDlongMin: Bool {return _storage._dlongMin != nil}
+  /// Clears the value of `dlongMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDlongMin() {_uniqueStorage()._dlongMin = nil}
 
   ///Ставка риска начальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshortMin: Double {
-    get {return _storage._dshortMin}
+  public var dshortMin: Quotation {
+    get {return _storage._dshortMin ?? Quotation()}
     set {_uniqueStorage()._dshortMin = newValue}
   }
+  /// Returns true if `dshortMin` has been explicitly set.
+  public var hasDshortMin: Bool {return _storage._dshortMin != nil}
+  /// Clears the value of `dshortMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDshortMin() {_uniqueStorage()._dshortMin = nil}
 
   ///Признак доступности для операций в шорт.
   public var shortEnabledFlag: Bool {
@@ -807,10 +831,14 @@ public struct Bond {
   }
 
   ///Шаг цены.
-  public var minPriceIncrement: Float {
-    get {return _storage._minPriceIncrement}
+  public var minPriceIncrement: Quotation {
+    get {return _storage._minPriceIncrement ?? Quotation()}
     set {_uniqueStorage()._minPriceIncrement = newValue}
   }
+  /// Returns true if `minPriceIncrement` has been explicitly set.
+  public var hasMinPriceIncrement: Bool {return _storage._minPriceIncrement != nil}
+  /// Clears the value of `minPriceIncrement`. Subsequent reads from it will return its default value.
+  public mutating func clearMinPriceIncrement() {_uniqueStorage()._minPriceIncrement = nil}
 
   ///Признак доступности торгов через API.
   public var apiTradeAvailableFlag: Bool {
@@ -855,7 +883,7 @@ public struct Currency {
     set {_uniqueStorage()._isin = newValue}
   }
 
-  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](/investAPI/glossary#lot)
+  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](https://tinkoff.github.io/investAPI/glossary#lot)
   public var lot: Int32 {
     get {return _storage._lot}
     set {_uniqueStorage()._lot = newValue}
@@ -868,40 +896,64 @@ public struct Currency {
   }
 
   ///Коэффициент ставки риска длинной позиции по инструменту.
-  public var klong: Double {
-    get {return _storage._klong}
+  public var klong: Quotation {
+    get {return _storage._klong ?? Quotation()}
     set {_uniqueStorage()._klong = newValue}
   }
+  /// Returns true if `klong` has been explicitly set.
+  public var hasKlong: Bool {return _storage._klong != nil}
+  /// Clears the value of `klong`. Subsequent reads from it will return its default value.
+  public mutating func clearKlong() {_uniqueStorage()._klong = nil}
 
   ///Коэффициент ставки риска короткой позиции по инструменту.
-  public var kshort: Double {
-    get {return _storage._kshort}
+  public var kshort: Quotation {
+    get {return _storage._kshort ?? Quotation()}
     set {_uniqueStorage()._kshort = newValue}
   }
+  /// Returns true if `kshort` has been explicitly set.
+  public var hasKshort: Bool {return _storage._kshort != nil}
+  /// Clears the value of `kshort`. Subsequent reads from it will return its default value.
+  public mutating func clearKshort() {_uniqueStorage()._kshort = nil}
 
   ///Ставка риска минимальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlong: Double {
-    get {return _storage._dlong}
+  public var dlong: Quotation {
+    get {return _storage._dlong ?? Quotation()}
     set {_uniqueStorage()._dlong = newValue}
   }
+  /// Returns true if `dlong` has been explicitly set.
+  public var hasDlong: Bool {return _storage._dlong != nil}
+  /// Clears the value of `dlong`. Subsequent reads from it will return its default value.
+  public mutating func clearDlong() {_uniqueStorage()._dlong = nil}
 
   ///Ставка риска минимальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshort: Double {
-    get {return _storage._dshort}
+  public var dshort: Quotation {
+    get {return _storage._dshort ?? Quotation()}
     set {_uniqueStorage()._dshort = newValue}
   }
+  /// Returns true if `dshort` has been explicitly set.
+  public var hasDshort: Bool {return _storage._dshort != nil}
+  /// Clears the value of `dshort`. Subsequent reads from it will return its default value.
+  public mutating func clearDshort() {_uniqueStorage()._dshort = nil}
 
   ///Ставка риска начальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlongMin: Double {
-    get {return _storage._dlongMin}
+  public var dlongMin: Quotation {
+    get {return _storage._dlongMin ?? Quotation()}
     set {_uniqueStorage()._dlongMin = newValue}
   }
+  /// Returns true if `dlongMin` has been explicitly set.
+  public var hasDlongMin: Bool {return _storage._dlongMin != nil}
+  /// Clears the value of `dlongMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDlongMin() {_uniqueStorage()._dlongMin = nil}
 
   ///Ставка риска начальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshortMin: Double {
-    get {return _storage._dshortMin}
+  public var dshortMin: Quotation {
+    get {return _storage._dshortMin ?? Quotation()}
     set {_uniqueStorage()._dshortMin = newValue}
   }
+  /// Returns true if `dshortMin` has been explicitly set.
+  public var hasDshortMin: Bool {return _storage._dshortMin != nil}
+  /// Clears the value of `dshortMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDshortMin() {_uniqueStorage()._dshortMin = nil}
 
   ///Признак доступности для операций в шорт.
   public var shortEnabledFlag: Bool {
@@ -974,10 +1026,14 @@ public struct Currency {
   }
 
   ///Шаг цены.
-  public var minPriceIncrement: Float {
-    get {return _storage._minPriceIncrement}
+  public var minPriceIncrement: Quotation {
+    get {return _storage._minPriceIncrement ?? Quotation()}
     set {_uniqueStorage()._minPriceIncrement = newValue}
   }
+  /// Returns true if `minPriceIncrement` has been explicitly set.
+  public var hasMinPriceIncrement: Bool {return _storage._minPriceIncrement != nil}
+  /// Clears the value of `minPriceIncrement`. Subsequent reads from it will return its default value.
+  public mutating func clearMinPriceIncrement() {_uniqueStorage()._minPriceIncrement = nil}
 
   ///Признак доступности торгов через API.
   public var apiTradeAvailableFlag: Bool {
@@ -1022,7 +1078,7 @@ public struct Etf {
     set {_uniqueStorage()._isin = newValue}
   }
 
-  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](/investAPI/glossary#lot)
+  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](https://tinkoff.github.io/investAPI/glossary#lot)
   public var lot: Int32 {
     get {return _storage._lot}
     set {_uniqueStorage()._lot = newValue}
@@ -1035,40 +1091,64 @@ public struct Etf {
   }
 
   ///Коэффициент ставки риска длинной позиции по инструменту.
-  public var klong: Double {
-    get {return _storage._klong}
+  public var klong: Quotation {
+    get {return _storage._klong ?? Quotation()}
     set {_uniqueStorage()._klong = newValue}
   }
+  /// Returns true if `klong` has been explicitly set.
+  public var hasKlong: Bool {return _storage._klong != nil}
+  /// Clears the value of `klong`. Subsequent reads from it will return its default value.
+  public mutating func clearKlong() {_uniqueStorage()._klong = nil}
 
   ///Коэффициент ставки риска короткой позиции по инструменту.
-  public var kshort: Double {
-    get {return _storage._kshort}
+  public var kshort: Quotation {
+    get {return _storage._kshort ?? Quotation()}
     set {_uniqueStorage()._kshort = newValue}
   }
+  /// Returns true if `kshort` has been explicitly set.
+  public var hasKshort: Bool {return _storage._kshort != nil}
+  /// Clears the value of `kshort`. Subsequent reads from it will return its default value.
+  public mutating func clearKshort() {_uniqueStorage()._kshort = nil}
 
   ///Ставка риска минимальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlong: Double {
-    get {return _storage._dlong}
+  public var dlong: Quotation {
+    get {return _storage._dlong ?? Quotation()}
     set {_uniqueStorage()._dlong = newValue}
   }
+  /// Returns true if `dlong` has been explicitly set.
+  public var hasDlong: Bool {return _storage._dlong != nil}
+  /// Clears the value of `dlong`. Subsequent reads from it will return its default value.
+  public mutating func clearDlong() {_uniqueStorage()._dlong = nil}
 
   ///Ставка риска минимальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshort: Double {
-    get {return _storage._dshort}
+  public var dshort: Quotation {
+    get {return _storage._dshort ?? Quotation()}
     set {_uniqueStorage()._dshort = newValue}
   }
+  /// Returns true if `dshort` has been explicitly set.
+  public var hasDshort: Bool {return _storage._dshort != nil}
+  /// Clears the value of `dshort`. Subsequent reads from it will return its default value.
+  public mutating func clearDshort() {_uniqueStorage()._dshort = nil}
 
   ///Ставка риска начальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlongMin: Double {
-    get {return _storage._dlongMin}
+  public var dlongMin: Quotation {
+    get {return _storage._dlongMin ?? Quotation()}
     set {_uniqueStorage()._dlongMin = newValue}
   }
+  /// Returns true if `dlongMin` has been explicitly set.
+  public var hasDlongMin: Bool {return _storage._dlongMin != nil}
+  /// Clears the value of `dlongMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDlongMin() {_uniqueStorage()._dlongMin = nil}
 
   ///Ставка риска начальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshortMin: Double {
-    get {return _storage._dshortMin}
+  public var dshortMin: Quotation {
+    get {return _storage._dshortMin ?? Quotation()}
     set {_uniqueStorage()._dshortMin = newValue}
   }
+  /// Returns true if `dshortMin` has been explicitly set.
+  public var hasDshortMin: Bool {return _storage._dshortMin != nil}
+  /// Clears the value of `dshortMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDshortMin() {_uniqueStorage()._dshortMin = nil}
 
   ///Признак доступности для операций в шорт.
   public var shortEnabledFlag: Bool {
@@ -1089,10 +1169,14 @@ public struct Etf {
   }
 
   ///Размер фиксированной комиссии фонда.
-  public var fixedCommission: Double {
-    get {return _storage._fixedCommission}
+  public var fixedCommission: Quotation {
+    get {return _storage._fixedCommission ?? Quotation()}
     set {_uniqueStorage()._fixedCommission = newValue}
   }
+  /// Returns true if `fixedCommission` has been explicitly set.
+  public var hasFixedCommission: Bool {return _storage._fixedCommission != nil}
+  /// Clears the value of `fixedCommission`. Subsequent reads from it will return its default value.
+  public mutating func clearFixedCommission() {_uniqueStorage()._fixedCommission = nil}
 
   ///Возможные значения: </br>**equity** — акции;</br>**fixed_income** — облигации;</br>**mixed_allocation** — смешанный;</br>**money_market** — денежный рынок;</br>**real_estate** — недвижимость;</br>**commodity** — товары;</br>**specialty** — специальный;</br>**private_equity** — private equity;</br>**alternative_investment** — альтернативные инвестиции.
   public var focusType: String {
@@ -1111,10 +1195,14 @@ public struct Etf {
   public mutating func clearReleasedDate() {_uniqueStorage()._releasedDate = nil}
 
   ///Количество акций фонда в обращении.
-  public var numShares: Double {
-    get {return _storage._numShares}
+  public var numShares: Quotation {
+    get {return _storage._numShares ?? Quotation()}
     set {_uniqueStorage()._numShares = newValue}
   }
+  /// Returns true if `numShares` has been explicitly set.
+  public var hasNumShares: Bool {return _storage._numShares != nil}
+  /// Clears the value of `numShares`. Subsequent reads from it will return its default value.
+  public mutating func clearNumShares() {_uniqueStorage()._numShares = nil}
 
   ///Код страны эмитента.
   public var countryOfRisk: String {
@@ -1165,10 +1253,14 @@ public struct Etf {
   }
 
   ///Шаг цены.
-  public var minPriceIncrement: Float {
-    get {return _storage._minPriceIncrement}
+  public var minPriceIncrement: Quotation {
+    get {return _storage._minPriceIncrement ?? Quotation()}
     set {_uniqueStorage()._minPriceIncrement = newValue}
   }
+  /// Returns true if `minPriceIncrement` has been explicitly set.
+  public var hasMinPriceIncrement: Bool {return _storage._minPriceIncrement != nil}
+  /// Clears the value of `minPriceIncrement`. Subsequent reads from it will return its default value.
+  public mutating func clearMinPriceIncrement() {_uniqueStorage()._minPriceIncrement = nil}
 
   ///Признак доступности торгов через API.
   public var apiTradeAvailableFlag: Bool {
@@ -1207,7 +1299,7 @@ public struct Future {
     set {_uniqueStorage()._classCode = newValue}
   }
 
-  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](/investAPI/glossary#lot)
+  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](https://tinkoff.github.io/investAPI/glossary#lot)
   public var lot: Int32 {
     get {return _storage._lot}
     set {_uniqueStorage()._lot = newValue}
@@ -1220,40 +1312,64 @@ public struct Future {
   }
 
   ///Коэффициент ставки риска длинной позиции по клиенту.
-  public var klong: Double {
-    get {return _storage._klong}
+  public var klong: Quotation {
+    get {return _storage._klong ?? Quotation()}
     set {_uniqueStorage()._klong = newValue}
   }
+  /// Returns true if `klong` has been explicitly set.
+  public var hasKlong: Bool {return _storage._klong != nil}
+  /// Clears the value of `klong`. Subsequent reads from it will return its default value.
+  public mutating func clearKlong() {_uniqueStorage()._klong = nil}
 
   ///Коэффициент ставки риска короткой позиции по клиенту.
-  public var kshort: Double {
-    get {return _storage._kshort}
+  public var kshort: Quotation {
+    get {return _storage._kshort ?? Quotation()}
     set {_uniqueStorage()._kshort = newValue}
   }
+  /// Returns true if `kshort` has been explicitly set.
+  public var hasKshort: Bool {return _storage._kshort != nil}
+  /// Clears the value of `kshort`. Subsequent reads from it will return its default value.
+  public mutating func clearKshort() {_uniqueStorage()._kshort = nil}
 
   ///Ставка риска минимальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlong: Double {
-    get {return _storage._dlong}
+  public var dlong: Quotation {
+    get {return _storage._dlong ?? Quotation()}
     set {_uniqueStorage()._dlong = newValue}
   }
+  /// Returns true if `dlong` has been explicitly set.
+  public var hasDlong: Bool {return _storage._dlong != nil}
+  /// Clears the value of `dlong`. Subsequent reads from it will return its default value.
+  public mutating func clearDlong() {_uniqueStorage()._dlong = nil}
 
   ///Ставка риска минимальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshort: Double {
-    get {return _storage._dshort}
+  public var dshort: Quotation {
+    get {return _storage._dshort ?? Quotation()}
     set {_uniqueStorage()._dshort = newValue}
   }
+  /// Returns true if `dshort` has been explicitly set.
+  public var hasDshort: Bool {return _storage._dshort != nil}
+  /// Clears the value of `dshort`. Subsequent reads from it will return its default value.
+  public mutating func clearDshort() {_uniqueStorage()._dshort = nil}
 
   ///Ставка риска начальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlongMin: Double {
-    get {return _storage._dlongMin}
+  public var dlongMin: Quotation {
+    get {return _storage._dlongMin ?? Quotation()}
     set {_uniqueStorage()._dlongMin = newValue}
   }
+  /// Returns true if `dlongMin` has been explicitly set.
+  public var hasDlongMin: Bool {return _storage._dlongMin != nil}
+  /// Clears the value of `dlongMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDlongMin() {_uniqueStorage()._dlongMin = nil}
 
   ///Ставка риска начальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshortMin: Double {
-    get {return _storage._dshortMin}
+  public var dshortMin: Quotation {
+    get {return _storage._dshortMin ?? Quotation()}
     set {_uniqueStorage()._dshortMin = newValue}
   }
+  /// Returns true if `dshortMin` has been explicitly set.
+  public var hasDshortMin: Bool {return _storage._dshortMin != nil}
+  /// Clears the value of `dshortMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDshortMin() {_uniqueStorage()._dshortMin = nil}
 
   ///Признак доступности для операций шорт.
   public var shortEnabledFlag: Bool {
@@ -1312,10 +1428,14 @@ public struct Future {
   }
 
   ///Размер основного актива.
-  public var basicAssetSize: Double {
-    get {return _storage._basicAssetSize}
+  public var basicAssetSize: Quotation {
+    get {return _storage._basicAssetSize ?? Quotation()}
     set {_uniqueStorage()._basicAssetSize = newValue}
   }
+  /// Returns true if `basicAssetSize` has been explicitly set.
+  public var hasBasicAssetSize: Bool {return _storage._basicAssetSize != nil}
+  /// Clears the value of `basicAssetSize`. Subsequent reads from it will return its default value.
+  public mutating func clearBasicAssetSize() {_uniqueStorage()._basicAssetSize = nil}
 
   ///Код страны эмитента.
   public var countryOfRisk: String {
@@ -1370,10 +1490,14 @@ public struct Future {
   }
 
   ///Шаг цены.
-  public var minPriceIncrement: Float {
-    get {return _storage._minPriceIncrement}
+  public var minPriceIncrement: Quotation {
+    get {return _storage._minPriceIncrement ?? Quotation()}
     set {_uniqueStorage()._minPriceIncrement = newValue}
   }
+  /// Returns true if `minPriceIncrement` has been explicitly set.
+  public var hasMinPriceIncrement: Bool {return _storage._minPriceIncrement != nil}
+  /// Clears the value of `minPriceIncrement`. Subsequent reads from it will return its default value.
+  public mutating func clearMinPriceIncrement() {_uniqueStorage()._minPriceIncrement = nil}
 
   ///Признак доступности торгов через API.
   public var apiTradeAvailableFlag: Bool {
@@ -1418,7 +1542,7 @@ public struct Share {
     set {_uniqueStorage()._isin = newValue}
   }
 
-  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](/investAPI/glossary#lot)
+  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](https://tinkoff.github.io/investAPI/glossary#lot)
   public var lot: Int32 {
     get {return _storage._lot}
     set {_uniqueStorage()._lot = newValue}
@@ -1431,40 +1555,64 @@ public struct Share {
   }
 
   ///Коэффициент ставки риска длинной позиции по инструменту.
-  public var klong: Double {
-    get {return _storage._klong}
+  public var klong: Quotation {
+    get {return _storage._klong ?? Quotation()}
     set {_uniqueStorage()._klong = newValue}
   }
+  /// Returns true if `klong` has been explicitly set.
+  public var hasKlong: Bool {return _storage._klong != nil}
+  /// Clears the value of `klong`. Subsequent reads from it will return its default value.
+  public mutating func clearKlong() {_uniqueStorage()._klong = nil}
 
   ///Коэффициент ставки риска короткой позиции по инструменту.
-  public var kshort: Double {
-    get {return _storage._kshort}
+  public var kshort: Quotation {
+    get {return _storage._kshort ?? Quotation()}
     set {_uniqueStorage()._kshort = newValue}
   }
+  /// Returns true if `kshort` has been explicitly set.
+  public var hasKshort: Bool {return _storage._kshort != nil}
+  /// Clears the value of `kshort`. Subsequent reads from it will return its default value.
+  public mutating func clearKshort() {_uniqueStorage()._kshort = nil}
 
   ///Ставка риска минимальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlong: Double {
-    get {return _storage._dlong}
+  public var dlong: Quotation {
+    get {return _storage._dlong ?? Quotation()}
     set {_uniqueStorage()._dlong = newValue}
   }
+  /// Returns true if `dlong` has been explicitly set.
+  public var hasDlong: Bool {return _storage._dlong != nil}
+  /// Clears the value of `dlong`. Subsequent reads from it will return its default value.
+  public mutating func clearDlong() {_uniqueStorage()._dlong = nil}
 
   ///Ставка риска минимальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshort: Double {
-    get {return _storage._dshort}
+  public var dshort: Quotation {
+    get {return _storage._dshort ?? Quotation()}
     set {_uniqueStorage()._dshort = newValue}
   }
+  /// Returns true if `dshort` has been explicitly set.
+  public var hasDshort: Bool {return _storage._dshort != nil}
+  /// Clears the value of `dshort`. Subsequent reads from it will return its default value.
+  public mutating func clearDshort() {_uniqueStorage()._dshort = nil}
 
   ///Ставка риска начальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlongMin: Double {
-    get {return _storage._dlongMin}
+  public var dlongMin: Quotation {
+    get {return _storage._dlongMin ?? Quotation()}
     set {_uniqueStorage()._dlongMin = newValue}
   }
+  /// Returns true if `dlongMin` has been explicitly set.
+  public var hasDlongMin: Bool {return _storage._dlongMin != nil}
+  /// Clears the value of `dlongMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDlongMin() {_uniqueStorage()._dlongMin = nil}
 
   ///Ставка риска начальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshortMin: Double {
-    get {return _storage._dshortMin}
+  public var dshortMin: Quotation {
+    get {return _storage._dshortMin ?? Quotation()}
     set {_uniqueStorage()._dshortMin = newValue}
   }
+  /// Returns true if `dshortMin` has been explicitly set.
+  public var hasDshortMin: Bool {return _storage._dshortMin != nil}
+  /// Clears the value of `dshortMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDshortMin() {_uniqueStorage()._dshortMin = nil}
 
   ///Признак доступности для операций в шорт.
   public var shortEnabledFlag: Bool {
@@ -1564,17 +1712,21 @@ public struct Share {
     set {_uniqueStorage()._divYieldFlag = newValue}
   }
 
-  ///Тип акции. Возможные значения: [ShareType](/investAPI/instruments#sharetype)
+  ///Тип акции. Возможные значения: [ShareType](https://tinkoff.github.io/investAPI/instruments#sharetype)
   public var shareType: ShareType {
     get {return _storage._shareType}
     set {_uniqueStorage()._shareType = newValue}
   }
 
   ///Шаг цены.
-  public var minPriceIncrement: Float {
-    get {return _storage._minPriceIncrement}
+  public var minPriceIncrement: Quotation {
+    get {return _storage._minPriceIncrement ?? Quotation()}
     set {_uniqueStorage()._minPriceIncrement = newValue}
   }
+  /// Returns true if `minPriceIncrement` has been explicitly set.
+  public var hasMinPriceIncrement: Bool {return _storage._minPriceIncrement != nil}
+  /// Clears the value of `minPriceIncrement`. Subsequent reads from it will return its default value.
+  public mutating func clearMinPriceIncrement() {_uniqueStorage()._minPriceIncrement = nil}
 
   ///Признак доступности торгов через API.
   public var apiTradeAvailableFlag: Bool {
@@ -1667,7 +1819,14 @@ public struct AccruedInterest {
   public mutating func clearValue() {self._value = nil}
 
   ///Величина выплаты в процентах от номинала.
-  public var valuePercent: Float = 0
+  public var valuePercent: Quotation {
+    get {return _valuePercent ?? Quotation()}
+    set {_valuePercent = newValue}
+  }
+  /// Returns true if `valuePercent` has been explicitly set.
+  public var hasValuePercent: Bool {return self._valuePercent != nil}
+  /// Clears the value of `valuePercent`. Subsequent reads from it will return its default value.
+  public mutating func clearValuePercent() {self._valuePercent = nil}
 
   ///Номинал облигации.
   public var nominal: Quotation {
@@ -1685,6 +1844,7 @@ public struct AccruedInterest {
 
   fileprivate var _date: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
   fileprivate var _value: Quotation? = nil
+  fileprivate var _valuePercent: Quotation? = nil
   fileprivate var _nominal: Quotation? = nil
 }
 
@@ -1729,7 +1889,14 @@ public struct GetFuturesMarginResponse {
   public mutating func clearInitialMarginOnSell() {self._initialMarginOnSell = nil}
 
   ///Шаг цены.
-  public var minPriceIncrement: Float = 0
+  public var minPriceIncrement: Quotation {
+    get {return _minPriceIncrement ?? Quotation()}
+    set {_minPriceIncrement = newValue}
+  }
+  /// Returns true if `minPriceIncrement` has been explicitly set.
+  public var hasMinPriceIncrement: Bool {return self._minPriceIncrement != nil}
+  /// Clears the value of `minPriceIncrement`. Subsequent reads from it will return its default value.
+  public mutating func clearMinPriceIncrement() {self._minPriceIncrement = nil}
 
   ///Стоимость шага цены.
   public var minPriceIncrementAmount: Quotation {
@@ -1747,6 +1914,7 @@ public struct GetFuturesMarginResponse {
 
   fileprivate var _initialMarginOnBuy: MoneyValue? = nil
   fileprivate var _initialMarginOnSell: MoneyValue? = nil
+  fileprivate var _minPriceIncrement: Quotation? = nil
   fileprivate var _minPriceIncrementAmount: Quotation? = nil
 }
 
@@ -1803,7 +1971,7 @@ public struct Instrument {
     set {_uniqueStorage()._isin = newValue}
   }
 
-  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](/investAPI/glossary#lot)
+  ///Лотность инструмента. Возможно совершение операций только на количества ценной бумаги, кратные параметру *lot*. Подробнее: [лот](https://tinkoff.github.io/investAPI/glossary#lot)
   public var lot: Int32 {
     get {return _storage._lot}
     set {_uniqueStorage()._lot = newValue}
@@ -1816,40 +1984,64 @@ public struct Instrument {
   }
 
   ///Коэффициент ставки риска длинной позиции по инструменту.
-  public var klong: Double {
-    get {return _storage._klong}
+  public var klong: Quotation {
+    get {return _storage._klong ?? Quotation()}
     set {_uniqueStorage()._klong = newValue}
   }
+  /// Returns true if `klong` has been explicitly set.
+  public var hasKlong: Bool {return _storage._klong != nil}
+  /// Clears the value of `klong`. Subsequent reads from it will return its default value.
+  public mutating func clearKlong() {_uniqueStorage()._klong = nil}
 
   ///Коэффициент ставки риска короткой позиции по инструменту.
-  public var kshort: Double {
-    get {return _storage._kshort}
+  public var kshort: Quotation {
+    get {return _storage._kshort ?? Quotation()}
     set {_uniqueStorage()._kshort = newValue}
   }
+  /// Returns true if `kshort` has been explicitly set.
+  public var hasKshort: Bool {return _storage._kshort != nil}
+  /// Clears the value of `kshort`. Subsequent reads from it will return its default value.
+  public mutating func clearKshort() {_uniqueStorage()._kshort = nil}
 
   ///Ставка риска минимальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlong: Double {
-    get {return _storage._dlong}
+  public var dlong: Quotation {
+    get {return _storage._dlong ?? Quotation()}
     set {_uniqueStorage()._dlong = newValue}
   }
+  /// Returns true if `dlong` has been explicitly set.
+  public var hasDlong: Bool {return _storage._dlong != nil}
+  /// Clears the value of `dlong`. Subsequent reads from it will return its default value.
+  public mutating func clearDlong() {_uniqueStorage()._dlong = nil}
 
   ///Ставка риска минимальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshort: Double {
-    get {return _storage._dshort}
+  public var dshort: Quotation {
+    get {return _storage._dshort ?? Quotation()}
     set {_uniqueStorage()._dshort = newValue}
   }
+  /// Returns true if `dshort` has been explicitly set.
+  public var hasDshort: Bool {return _storage._dshort != nil}
+  /// Clears the value of `dshort`. Subsequent reads from it will return its default value.
+  public mutating func clearDshort() {_uniqueStorage()._dshort = nil}
 
   ///Ставка риска начальной маржи в лонг. Подробнее: [ставка риска в лонг](https://help.tinkoff.ru/margin-trade/long/risk-rate/)
-  public var dlongMin: Double {
-    get {return _storage._dlongMin}
+  public var dlongMin: Quotation {
+    get {return _storage._dlongMin ?? Quotation()}
     set {_uniqueStorage()._dlongMin = newValue}
   }
+  /// Returns true if `dlongMin` has been explicitly set.
+  public var hasDlongMin: Bool {return _storage._dlongMin != nil}
+  /// Clears the value of `dlongMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDlongMin() {_uniqueStorage()._dlongMin = nil}
 
   ///Ставка риска начальной маржи в шорт. Подробнее: [ставка риска в шорт](https://help.tinkoff.ru/margin-trade/short/risk-rate/)
-  public var dshortMin: Double {
-    get {return _storage._dshortMin}
+  public var dshortMin: Quotation {
+    get {return _storage._dshortMin ?? Quotation()}
     set {_uniqueStorage()._dshortMin = newValue}
   }
+  /// Returns true if `dshortMin` has been explicitly set.
+  public var hasDshortMin: Bool {return _storage._dshortMin != nil}
+  /// Clears the value of `dshortMin`. Subsequent reads from it will return its default value.
+  public mutating func clearDshortMin() {_uniqueStorage()._dshortMin = nil}
 
   ///Признак доступности для операций в шорт.
   public var shortEnabledFlag: Bool {
@@ -1912,10 +2104,14 @@ public struct Instrument {
   }
 
   ///Шаг цены.
-  public var minPriceIncrement: Float {
-    get {return _storage._minPriceIncrement}
+  public var minPriceIncrement: Quotation {
+    get {return _storage._minPriceIncrement ?? Quotation()}
     set {_uniqueStorage()._minPriceIncrement = newValue}
   }
+  /// Returns true if `minPriceIncrement` has been explicitly set.
+  public var hasMinPriceIncrement: Bool {return _storage._minPriceIncrement != nil}
+  /// Clears the value of `minPriceIncrement`. Subsequent reads from it will return its default value.
+  public mutating func clearMinPriceIncrement() {_uniqueStorage()._minPriceIncrement = nil}
 
   ///Признак доступности торгов через API.
   public var apiTradeAvailableFlag: Bool {
@@ -2768,12 +2964,12 @@ extension Bond: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
     var _isin: String = String()
     var _lot: Int32 = 0
     var _currency: String = String()
-    var _klong: Double = 0
-    var _kshort: Double = 0
-    var _dlong: Double = 0
-    var _dshort: Double = 0
-    var _dlongMin: Double = 0
-    var _dshortMin: Double = 0
+    var _klong: Quotation? = nil
+    var _kshort: Quotation? = nil
+    var _dlong: Quotation? = nil
+    var _dshort: Quotation? = nil
+    var _dlongMin: Quotation? = nil
+    var _dshortMin: Quotation? = nil
     var _shortEnabledFlag: Bool = false
     var _name: String = String()
     var _exchange: String = String()
@@ -2797,7 +2993,7 @@ extension Bond: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
     var _floatingCouponFlag: Bool = false
     var _perpetualFlag: Bool = false
     var _amortizationFlag: Bool = false
-    var _minPriceIncrement: Float = 0
+    var _minPriceIncrement: Quotation? = nil
     var _apiTradeAvailableFlag: Bool = false
 
     static let defaultInstance = _StorageClass()
@@ -2866,12 +3062,12 @@ extension Bond: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
         case 4: try { try decoder.decodeSingularStringField(value: &_storage._isin) }()
         case 5: try { try decoder.decodeSingularInt32Field(value: &_storage._lot) }()
         case 6: try { try decoder.decodeSingularStringField(value: &_storage._currency) }()
-        case 7: try { try decoder.decodeSingularDoubleField(value: &_storage._klong) }()
-        case 8: try { try decoder.decodeSingularDoubleField(value: &_storage._kshort) }()
-        case 9: try { try decoder.decodeSingularDoubleField(value: &_storage._dlong) }()
-        case 10: try { try decoder.decodeSingularDoubleField(value: &_storage._dshort) }()
-        case 11: try { try decoder.decodeSingularDoubleField(value: &_storage._dlongMin) }()
-        case 12: try { try decoder.decodeSingularDoubleField(value: &_storage._dshortMin) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._klong) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._kshort) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._dlong) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._dshort) }()
+        case 11: try { try decoder.decodeSingularMessageField(value: &_storage._dlongMin) }()
+        case 12: try { try decoder.decodeSingularMessageField(value: &_storage._dshortMin) }()
         case 13: try { try decoder.decodeSingularBoolField(value: &_storage._shortEnabledFlag) }()
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
         case 16: try { try decoder.decodeSingularStringField(value: &_storage._exchange) }()
@@ -2895,7 +3091,7 @@ extension Bond: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
         case 35: try { try decoder.decodeSingularBoolField(value: &_storage._floatingCouponFlag) }()
         case 36: try { try decoder.decodeSingularBoolField(value: &_storage._perpetualFlag) }()
         case 37: try { try decoder.decodeSingularBoolField(value: &_storage._amortizationFlag) }()
-        case 38: try { try decoder.decodeSingularFloatField(value: &_storage._minPriceIncrement) }()
+        case 38: try { try decoder.decodeSingularMessageField(value: &_storage._minPriceIncrement) }()
         case 39: try { try decoder.decodeSingularBoolField(value: &_storage._apiTradeAvailableFlag) }()
         default: break
         }
@@ -2927,24 +3123,24 @@ extension Bond: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
       if !_storage._currency.isEmpty {
         try visitor.visitSingularStringField(value: _storage._currency, fieldNumber: 6)
       }
-      if _storage._klong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._klong, fieldNumber: 7)
-      }
-      if _storage._kshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._kshort, fieldNumber: 8)
-      }
-      if _storage._dlong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlong, fieldNumber: 9)
-      }
-      if _storage._dshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshort, fieldNumber: 10)
-      }
-      if _storage._dlongMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlongMin, fieldNumber: 11)
-      }
-      if _storage._dshortMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshortMin, fieldNumber: 12)
-      }
+      try { if let v = _storage._klong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._kshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._dlong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._dshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._dlongMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._dshortMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      } }()
       if _storage._shortEnabledFlag != false {
         try visitor.visitSingularBoolField(value: _storage._shortEnabledFlag, fieldNumber: 13)
       }
@@ -3014,9 +3210,9 @@ extension Bond: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
       if _storage._amortizationFlag != false {
         try visitor.visitSingularBoolField(value: _storage._amortizationFlag, fieldNumber: 37)
       }
-      if _storage._minPriceIncrement != 0 {
-        try visitor.visitSingularFloatField(value: _storage._minPriceIncrement, fieldNumber: 38)
-      }
+      try { if let v = _storage._minPriceIncrement {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 38)
+      } }()
       if _storage._apiTradeAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._apiTradeAvailableFlag, fieldNumber: 39)
       }
@@ -3112,12 +3308,12 @@ extension Currency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     var _isin: String = String()
     var _lot: Int32 = 0
     var _currency: String = String()
-    var _klong: Double = 0
-    var _kshort: Double = 0
-    var _dlong: Double = 0
-    var _dshort: Double = 0
-    var _dlongMin: Double = 0
-    var _dshortMin: Double = 0
+    var _klong: Quotation? = nil
+    var _kshort: Quotation? = nil
+    var _dlong: Quotation? = nil
+    var _dshort: Quotation? = nil
+    var _dlongMin: Quotation? = nil
+    var _dshortMin: Quotation? = nil
     var _shortEnabledFlag: Bool = false
     var _name: String = String()
     var _exchange: String = String()
@@ -3129,7 +3325,7 @@ extension Currency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     var _buyAvailableFlag: Bool = false
     var _sellAvailableFlag: Bool = false
     var _isoCurrencyName: String = String()
-    var _minPriceIncrement: Float = 0
+    var _minPriceIncrement: Quotation? = nil
     var _apiTradeAvailableFlag: Bool = false
 
     static let defaultInstance = _StorageClass()
@@ -3186,12 +3382,12 @@ extension Currency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         case 4: try { try decoder.decodeSingularStringField(value: &_storage._isin) }()
         case 5: try { try decoder.decodeSingularInt32Field(value: &_storage._lot) }()
         case 6: try { try decoder.decodeSingularStringField(value: &_storage._currency) }()
-        case 7: try { try decoder.decodeSingularDoubleField(value: &_storage._klong) }()
-        case 8: try { try decoder.decodeSingularDoubleField(value: &_storage._kshort) }()
-        case 9: try { try decoder.decodeSingularDoubleField(value: &_storage._dlong) }()
-        case 10: try { try decoder.decodeSingularDoubleField(value: &_storage._dshort) }()
-        case 11: try { try decoder.decodeSingularDoubleField(value: &_storage._dlongMin) }()
-        case 12: try { try decoder.decodeSingularDoubleField(value: &_storage._dshortMin) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._klong) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._kshort) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._dlong) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._dshort) }()
+        case 11: try { try decoder.decodeSingularMessageField(value: &_storage._dlongMin) }()
+        case 12: try { try decoder.decodeSingularMessageField(value: &_storage._dshortMin) }()
         case 13: try { try decoder.decodeSingularBoolField(value: &_storage._shortEnabledFlag) }()
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
         case 16: try { try decoder.decodeSingularStringField(value: &_storage._exchange) }()
@@ -3203,7 +3399,7 @@ extension Currency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         case 22: try { try decoder.decodeSingularBoolField(value: &_storage._buyAvailableFlag) }()
         case 23: try { try decoder.decodeSingularBoolField(value: &_storage._sellAvailableFlag) }()
         case 24: try { try decoder.decodeSingularStringField(value: &_storage._isoCurrencyName) }()
-        case 25: try { try decoder.decodeSingularFloatField(value: &_storage._minPriceIncrement) }()
+        case 25: try { try decoder.decodeSingularMessageField(value: &_storage._minPriceIncrement) }()
         case 26: try { try decoder.decodeSingularBoolField(value: &_storage._apiTradeAvailableFlag) }()
         default: break
         }
@@ -3235,24 +3431,24 @@ extension Currency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       if !_storage._currency.isEmpty {
         try visitor.visitSingularStringField(value: _storage._currency, fieldNumber: 6)
       }
-      if _storage._klong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._klong, fieldNumber: 7)
-      }
-      if _storage._kshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._kshort, fieldNumber: 8)
-      }
-      if _storage._dlong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlong, fieldNumber: 9)
-      }
-      if _storage._dshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshort, fieldNumber: 10)
-      }
-      if _storage._dlongMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlongMin, fieldNumber: 11)
-      }
-      if _storage._dshortMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshortMin, fieldNumber: 12)
-      }
+      try { if let v = _storage._klong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._kshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._dlong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._dshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._dlongMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._dshortMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      } }()
       if _storage._shortEnabledFlag != false {
         try visitor.visitSingularBoolField(value: _storage._shortEnabledFlag, fieldNumber: 13)
       }
@@ -3286,9 +3482,9 @@ extension Currency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       if !_storage._isoCurrencyName.isEmpty {
         try visitor.visitSingularStringField(value: _storage._isoCurrencyName, fieldNumber: 24)
       }
-      if _storage._minPriceIncrement != 0 {
-        try visitor.visitSingularFloatField(value: _storage._minPriceIncrement, fieldNumber: 25)
-      }
+      try { if let v = _storage._minPriceIncrement {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 25)
+      } }()
       if _storage._apiTradeAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._apiTradeAvailableFlag, fieldNumber: 26)
       }
@@ -3376,19 +3572,19 @@ extension Etf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, 
     var _isin: String = String()
     var _lot: Int32 = 0
     var _currency: String = String()
-    var _klong: Double = 0
-    var _kshort: Double = 0
-    var _dlong: Double = 0
-    var _dshort: Double = 0
-    var _dlongMin: Double = 0
-    var _dshortMin: Double = 0
+    var _klong: Quotation? = nil
+    var _kshort: Quotation? = nil
+    var _dlong: Quotation? = nil
+    var _dshort: Quotation? = nil
+    var _dlongMin: Quotation? = nil
+    var _dshortMin: Quotation? = nil
     var _shortEnabledFlag: Bool = false
     var _name: String = String()
     var _exchange: String = String()
-    var _fixedCommission: Double = 0
+    var _fixedCommission: Quotation? = nil
     var _focusType: String = String()
     var _releasedDate: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
-    var _numShares: Double = 0
+    var _numShares: Quotation? = nil
     var _countryOfRisk: String = String()
     var _countryOfRiskName: String = String()
     var _sector: String = String()
@@ -3397,7 +3593,7 @@ extension Etf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, 
     var _otcFlag: Bool = false
     var _buyAvailableFlag: Bool = false
     var _sellAvailableFlag: Bool = false
-    var _minPriceIncrement: Float = 0
+    var _minPriceIncrement: Quotation? = nil
     var _apiTradeAvailableFlag: Bool = false
 
     static let defaultInstance = _StorageClass()
@@ -3458,19 +3654,19 @@ extension Etf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, 
         case 4: try { try decoder.decodeSingularStringField(value: &_storage._isin) }()
         case 5: try { try decoder.decodeSingularInt32Field(value: &_storage._lot) }()
         case 6: try { try decoder.decodeSingularStringField(value: &_storage._currency) }()
-        case 7: try { try decoder.decodeSingularDoubleField(value: &_storage._klong) }()
-        case 8: try { try decoder.decodeSingularDoubleField(value: &_storage._kshort) }()
-        case 9: try { try decoder.decodeSingularDoubleField(value: &_storage._dlong) }()
-        case 10: try { try decoder.decodeSingularDoubleField(value: &_storage._dshort) }()
-        case 11: try { try decoder.decodeSingularDoubleField(value: &_storage._dlongMin) }()
-        case 12: try { try decoder.decodeSingularDoubleField(value: &_storage._dshortMin) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._klong) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._kshort) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._dlong) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._dshort) }()
+        case 11: try { try decoder.decodeSingularMessageField(value: &_storage._dlongMin) }()
+        case 12: try { try decoder.decodeSingularMessageField(value: &_storage._dshortMin) }()
         case 13: try { try decoder.decodeSingularBoolField(value: &_storage._shortEnabledFlag) }()
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
         case 16: try { try decoder.decodeSingularStringField(value: &_storage._exchange) }()
-        case 17: try { try decoder.decodeSingularDoubleField(value: &_storage._fixedCommission) }()
+        case 17: try { try decoder.decodeSingularMessageField(value: &_storage._fixedCommission) }()
         case 18: try { try decoder.decodeSingularStringField(value: &_storage._focusType) }()
         case 19: try { try decoder.decodeSingularMessageField(value: &_storage._releasedDate) }()
-        case 20: try { try decoder.decodeSingularDoubleField(value: &_storage._numShares) }()
+        case 20: try { try decoder.decodeSingularMessageField(value: &_storage._numShares) }()
         case 21: try { try decoder.decodeSingularStringField(value: &_storage._countryOfRisk) }()
         case 22: try { try decoder.decodeSingularStringField(value: &_storage._countryOfRiskName) }()
         case 23: try { try decoder.decodeSingularStringField(value: &_storage._sector) }()
@@ -3479,7 +3675,7 @@ extension Etf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, 
         case 26: try { try decoder.decodeSingularBoolField(value: &_storage._otcFlag) }()
         case 27: try { try decoder.decodeSingularBoolField(value: &_storage._buyAvailableFlag) }()
         case 28: try { try decoder.decodeSingularBoolField(value: &_storage._sellAvailableFlag) }()
-        case 29: try { try decoder.decodeSingularFloatField(value: &_storage._minPriceIncrement) }()
+        case 29: try { try decoder.decodeSingularMessageField(value: &_storage._minPriceIncrement) }()
         case 30: try { try decoder.decodeSingularBoolField(value: &_storage._apiTradeAvailableFlag) }()
         default: break
         }
@@ -3511,24 +3707,24 @@ extension Etf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, 
       if !_storage._currency.isEmpty {
         try visitor.visitSingularStringField(value: _storage._currency, fieldNumber: 6)
       }
-      if _storage._klong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._klong, fieldNumber: 7)
-      }
-      if _storage._kshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._kshort, fieldNumber: 8)
-      }
-      if _storage._dlong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlong, fieldNumber: 9)
-      }
-      if _storage._dshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshort, fieldNumber: 10)
-      }
-      if _storage._dlongMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlongMin, fieldNumber: 11)
-      }
-      if _storage._dshortMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshortMin, fieldNumber: 12)
-      }
+      try { if let v = _storage._klong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._kshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._dlong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._dshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._dlongMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._dshortMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      } }()
       if _storage._shortEnabledFlag != false {
         try visitor.visitSingularBoolField(value: _storage._shortEnabledFlag, fieldNumber: 13)
       }
@@ -3538,18 +3734,18 @@ extension Etf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, 
       if !_storage._exchange.isEmpty {
         try visitor.visitSingularStringField(value: _storage._exchange, fieldNumber: 16)
       }
-      if _storage._fixedCommission != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._fixedCommission, fieldNumber: 17)
-      }
+      try { if let v = _storage._fixedCommission {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+      } }()
       if !_storage._focusType.isEmpty {
         try visitor.visitSingularStringField(value: _storage._focusType, fieldNumber: 18)
       }
       try { if let v = _storage._releasedDate {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 19)
       } }()
-      if _storage._numShares != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._numShares, fieldNumber: 20)
-      }
+      try { if let v = _storage._numShares {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
+      } }()
       if !_storage._countryOfRisk.isEmpty {
         try visitor.visitSingularStringField(value: _storage._countryOfRisk, fieldNumber: 21)
       }
@@ -3574,9 +3770,9 @@ extension Etf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, 
       if _storage._sellAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._sellAvailableFlag, fieldNumber: 28)
       }
-      if _storage._minPriceIncrement != 0 {
-        try visitor.visitSingularFloatField(value: _storage._minPriceIncrement, fieldNumber: 29)
-      }
+      try { if let v = _storage._minPriceIncrement {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 29)
+      } }()
       if _storage._apiTradeAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._apiTradeAvailableFlag, fieldNumber: 30)
       }
@@ -3668,12 +3864,12 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     var _classCode: String = String()
     var _lot: Int32 = 0
     var _currency: String = String()
-    var _klong: Double = 0
-    var _kshort: Double = 0
-    var _dlong: Double = 0
-    var _dshort: Double = 0
-    var _dlongMin: Double = 0
-    var _dshortMin: Double = 0
+    var _klong: Quotation? = nil
+    var _kshort: Quotation? = nil
+    var _dlong: Quotation? = nil
+    var _dshort: Quotation? = nil
+    var _dlongMin: Quotation? = nil
+    var _dshortMin: Quotation? = nil
     var _shortEnabledFlag: Bool = false
     var _name: String = String()
     var _exchange: String = String()
@@ -3682,7 +3878,7 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     var _futuresType: String = String()
     var _assetType: String = String()
     var _basicAsset: String = String()
-    var _basicAssetSize: Double = 0
+    var _basicAssetSize: Quotation? = nil
     var _countryOfRisk: String = String()
     var _countryOfRiskName: String = String()
     var _sector: String = String()
@@ -3691,7 +3887,7 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
     var _otcFlag: Bool = false
     var _buyAvailableFlag: Bool = false
     var _sellAvailableFlag: Bool = false
-    var _minPriceIncrement: Float = 0
+    var _minPriceIncrement: Quotation? = nil
     var _apiTradeAvailableFlag: Bool = false
 
     static let defaultInstance = _StorageClass()
@@ -3752,12 +3948,12 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
         case 3: try { try decoder.decodeSingularStringField(value: &_storage._classCode) }()
         case 4: try { try decoder.decodeSingularInt32Field(value: &_storage._lot) }()
         case 5: try { try decoder.decodeSingularStringField(value: &_storage._currency) }()
-        case 6: try { try decoder.decodeSingularDoubleField(value: &_storage._klong) }()
-        case 7: try { try decoder.decodeSingularDoubleField(value: &_storage._kshort) }()
-        case 8: try { try decoder.decodeSingularDoubleField(value: &_storage._dlong) }()
-        case 9: try { try decoder.decodeSingularDoubleField(value: &_storage._dshort) }()
-        case 10: try { try decoder.decodeSingularDoubleField(value: &_storage._dlongMin) }()
-        case 11: try { try decoder.decodeSingularDoubleField(value: &_storage._dshortMin) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._klong) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._kshort) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._dlong) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._dshort) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._dlongMin) }()
+        case 11: try { try decoder.decodeSingularMessageField(value: &_storage._dshortMin) }()
         case 12: try { try decoder.decodeSingularBoolField(value: &_storage._shortEnabledFlag) }()
         case 13: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
         case 14: try { try decoder.decodeSingularStringField(value: &_storage._exchange) }()
@@ -3766,7 +3962,7 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
         case 17: try { try decoder.decodeSingularStringField(value: &_storage._futuresType) }()
         case 18: try { try decoder.decodeSingularStringField(value: &_storage._assetType) }()
         case 19: try { try decoder.decodeSingularStringField(value: &_storage._basicAsset) }()
-        case 20: try { try decoder.decodeSingularDoubleField(value: &_storage._basicAssetSize) }()
+        case 20: try { try decoder.decodeSingularMessageField(value: &_storage._basicAssetSize) }()
         case 21: try { try decoder.decodeSingularStringField(value: &_storage._countryOfRisk) }()
         case 22: try { try decoder.decodeSingularStringField(value: &_storage._countryOfRiskName) }()
         case 23: try { try decoder.decodeSingularStringField(value: &_storage._sector) }()
@@ -3775,7 +3971,7 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
         case 26: try { try decoder.decodeSingularBoolField(value: &_storage._otcFlag) }()
         case 27: try { try decoder.decodeSingularBoolField(value: &_storage._buyAvailableFlag) }()
         case 28: try { try decoder.decodeSingularBoolField(value: &_storage._sellAvailableFlag) }()
-        case 29: try { try decoder.decodeSingularFloatField(value: &_storage._minPriceIncrement) }()
+        case 29: try { try decoder.decodeSingularMessageField(value: &_storage._minPriceIncrement) }()
         case 30: try { try decoder.decodeSingularBoolField(value: &_storage._apiTradeAvailableFlag) }()
         default: break
         }
@@ -3804,24 +4000,24 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
       if !_storage._currency.isEmpty {
         try visitor.visitSingularStringField(value: _storage._currency, fieldNumber: 5)
       }
-      if _storage._klong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._klong, fieldNumber: 6)
-      }
-      if _storage._kshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._kshort, fieldNumber: 7)
-      }
-      if _storage._dlong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlong, fieldNumber: 8)
-      }
-      if _storage._dshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshort, fieldNumber: 9)
-      }
-      if _storage._dlongMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlongMin, fieldNumber: 10)
-      }
-      if _storage._dshortMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshortMin, fieldNumber: 11)
-      }
+      try { if let v = _storage._klong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._kshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._dlong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._dshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._dlongMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._dshortMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+      } }()
       if _storage._shortEnabledFlag != false {
         try visitor.visitSingularBoolField(value: _storage._shortEnabledFlag, fieldNumber: 12)
       }
@@ -3846,9 +4042,9 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
       if !_storage._basicAsset.isEmpty {
         try visitor.visitSingularStringField(value: _storage._basicAsset, fieldNumber: 19)
       }
-      if _storage._basicAssetSize != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._basicAssetSize, fieldNumber: 20)
-      }
+      try { if let v = _storage._basicAssetSize {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
+      } }()
       if !_storage._countryOfRisk.isEmpty {
         try visitor.visitSingularStringField(value: _storage._countryOfRisk, fieldNumber: 21)
       }
@@ -3873,9 +4069,9 @@ extension Future: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBas
       if _storage._sellAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._sellAvailableFlag, fieldNumber: 28)
       }
-      if _storage._minPriceIncrement != 0 {
-        try visitor.visitSingularFloatField(value: _storage._minPriceIncrement, fieldNumber: 29)
-      }
+      try { if let v = _storage._minPriceIncrement {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 29)
+      } }()
       if _storage._apiTradeAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._apiTradeAvailableFlag, fieldNumber: 30)
       }
@@ -3969,12 +4165,12 @@ extension Share: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
     var _isin: String = String()
     var _lot: Int32 = 0
     var _currency: String = String()
-    var _klong: Double = 0
-    var _kshort: Double = 0
-    var _dlong: Double = 0
-    var _dshort: Double = 0
-    var _dlongMin: Double = 0
-    var _dshortMin: Double = 0
+    var _klong: Quotation? = nil
+    var _kshort: Quotation? = nil
+    var _dlong: Quotation? = nil
+    var _dshort: Quotation? = nil
+    var _dlongMin: Quotation? = nil
+    var _dshortMin: Quotation? = nil
     var _shortEnabledFlag: Bool = false
     var _name: String = String()
     var _exchange: String = String()
@@ -3991,7 +4187,7 @@ extension Share: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
     var _sellAvailableFlag: Bool = false
     var _divYieldFlag: Bool = false
     var _shareType: ShareType = .unspecified
-    var _minPriceIncrement: Float = 0
+    var _minPriceIncrement: Quotation? = nil
     var _apiTradeAvailableFlag: Bool = false
 
     static let defaultInstance = _StorageClass()
@@ -4053,12 +4249,12 @@ extension Share: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
         case 4: try { try decoder.decodeSingularStringField(value: &_storage._isin) }()
         case 5: try { try decoder.decodeSingularInt32Field(value: &_storage._lot) }()
         case 6: try { try decoder.decodeSingularStringField(value: &_storage._currency) }()
-        case 7: try { try decoder.decodeSingularDoubleField(value: &_storage._klong) }()
-        case 8: try { try decoder.decodeSingularDoubleField(value: &_storage._kshort) }()
-        case 9: try { try decoder.decodeSingularDoubleField(value: &_storage._dlong) }()
-        case 10: try { try decoder.decodeSingularDoubleField(value: &_storage._dshort) }()
-        case 11: try { try decoder.decodeSingularDoubleField(value: &_storage._dlongMin) }()
-        case 12: try { try decoder.decodeSingularDoubleField(value: &_storage._dshortMin) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._klong) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._kshort) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._dlong) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._dshort) }()
+        case 11: try { try decoder.decodeSingularMessageField(value: &_storage._dlongMin) }()
+        case 12: try { try decoder.decodeSingularMessageField(value: &_storage._dshortMin) }()
         case 13: try { try decoder.decodeSingularBoolField(value: &_storage._shortEnabledFlag) }()
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
         case 16: try { try decoder.decodeSingularStringField(value: &_storage._exchange) }()
@@ -4075,7 +4271,7 @@ extension Share: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
         case 28: try { try decoder.decodeSingularBoolField(value: &_storage._sellAvailableFlag) }()
         case 29: try { try decoder.decodeSingularBoolField(value: &_storage._divYieldFlag) }()
         case 30: try { try decoder.decodeSingularEnumField(value: &_storage._shareType) }()
-        case 31: try { try decoder.decodeSingularFloatField(value: &_storage._minPriceIncrement) }()
+        case 31: try { try decoder.decodeSingularMessageField(value: &_storage._minPriceIncrement) }()
         case 32: try { try decoder.decodeSingularBoolField(value: &_storage._apiTradeAvailableFlag) }()
         default: break
         }
@@ -4107,24 +4303,24 @@ extension Share: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
       if !_storage._currency.isEmpty {
         try visitor.visitSingularStringField(value: _storage._currency, fieldNumber: 6)
       }
-      if _storage._klong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._klong, fieldNumber: 7)
-      }
-      if _storage._kshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._kshort, fieldNumber: 8)
-      }
-      if _storage._dlong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlong, fieldNumber: 9)
-      }
-      if _storage._dshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshort, fieldNumber: 10)
-      }
-      if _storage._dlongMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlongMin, fieldNumber: 11)
-      }
-      if _storage._dshortMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshortMin, fieldNumber: 12)
-      }
+      try { if let v = _storage._klong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._kshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._dlong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._dshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._dlongMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._dshortMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      } }()
       if _storage._shortEnabledFlag != false {
         try visitor.visitSingularBoolField(value: _storage._shortEnabledFlag, fieldNumber: 13)
       }
@@ -4173,9 +4369,9 @@ extension Share: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
       if _storage._shareType != .unspecified {
         try visitor.visitSingularEnumField(value: _storage._shareType, fieldNumber: 30)
       }
-      if _storage._minPriceIncrement != 0 {
-        try visitor.visitSingularFloatField(value: _storage._minPriceIncrement, fieldNumber: 31)
-      }
+      try { if let v = _storage._minPriceIncrement {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 31)
+      } }()
       if _storage._apiTradeAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._apiTradeAvailableFlag, fieldNumber: 32)
       }
@@ -4324,7 +4520,7 @@ extension AccruedInterest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._date) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._value) }()
-      case 3: try { try decoder.decodeSingularFloatField(value: &self.valuePercent) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._valuePercent) }()
       case 4: try { try decoder.decodeSingularMessageField(value: &self._nominal) }()
       default: break
       }
@@ -4342,9 +4538,9 @@ extension AccruedInterest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     try { if let v = self._value {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     } }()
-    if self.valuePercent != 0 {
-      try visitor.visitSingularFloatField(value: self.valuePercent, fieldNumber: 3)
-    }
+    try { if let v = self._valuePercent {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
     try { if let v = self._nominal {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
@@ -4354,7 +4550,7 @@ extension AccruedInterest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   public static func ==(lhs: AccruedInterest, rhs: AccruedInterest) -> Bool {
     if lhs._date != rhs._date {return false}
     if lhs._value != rhs._value {return false}
-    if lhs.valuePercent != rhs.valuePercent {return false}
+    if lhs._valuePercent != rhs._valuePercent {return false}
     if lhs._nominal != rhs._nominal {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -4410,7 +4606,7 @@ extension GetFuturesMarginResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._initialMarginOnBuy) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._initialMarginOnSell) }()
-      case 3: try { try decoder.decodeSingularFloatField(value: &self.minPriceIncrement) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._minPriceIncrement) }()
       case 4: try { try decoder.decodeSingularMessageField(value: &self._minPriceIncrementAmount) }()
       default: break
       }
@@ -4428,9 +4624,9 @@ extension GetFuturesMarginResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
     try { if let v = self._initialMarginOnSell {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     } }()
-    if self.minPriceIncrement != 0 {
-      try visitor.visitSingularFloatField(value: self.minPriceIncrement, fieldNumber: 3)
-    }
+    try { if let v = self._minPriceIncrement {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
     try { if let v = self._minPriceIncrementAmount {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
@@ -4440,7 +4636,7 @@ extension GetFuturesMarginResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
   public static func ==(lhs: GetFuturesMarginResponse, rhs: GetFuturesMarginResponse) -> Bool {
     if lhs._initialMarginOnBuy != rhs._initialMarginOnBuy {return false}
     if lhs._initialMarginOnSell != rhs._initialMarginOnSell {return false}
-    if lhs.minPriceIncrement != rhs.minPriceIncrement {return false}
+    if lhs._minPriceIncrement != rhs._minPriceIncrement {return false}
     if lhs._minPriceIncrementAmount != rhs._minPriceIncrementAmount {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -4519,12 +4715,12 @@ extension Instrument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     var _isin: String = String()
     var _lot: Int32 = 0
     var _currency: String = String()
-    var _klong: Double = 0
-    var _kshort: Double = 0
-    var _dlong: Double = 0
-    var _dshort: Double = 0
-    var _dlongMin: Double = 0
-    var _dshortMin: Double = 0
+    var _klong: Quotation? = nil
+    var _kshort: Quotation? = nil
+    var _dlong: Quotation? = nil
+    var _dshort: Quotation? = nil
+    var _dlongMin: Quotation? = nil
+    var _dshortMin: Quotation? = nil
     var _shortEnabledFlag: Bool = false
     var _name: String = String()
     var _exchange: String = String()
@@ -4535,7 +4731,7 @@ extension Instrument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     var _otcFlag: Bool = false
     var _buyAvailableFlag: Bool = false
     var _sellAvailableFlag: Bool = false
-    var _minPriceIncrement: Float = 0
+    var _minPriceIncrement: Quotation? = nil
     var _apiTradeAvailableFlag: Bool = false
 
     static let defaultInstance = _StorageClass()
@@ -4591,12 +4787,12 @@ extension Instrument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
         case 4: try { try decoder.decodeSingularStringField(value: &_storage._isin) }()
         case 5: try { try decoder.decodeSingularInt32Field(value: &_storage._lot) }()
         case 6: try { try decoder.decodeSingularStringField(value: &_storage._currency) }()
-        case 7: try { try decoder.decodeSingularDoubleField(value: &_storage._klong) }()
-        case 8: try { try decoder.decodeSingularDoubleField(value: &_storage._kshort) }()
-        case 9: try { try decoder.decodeSingularDoubleField(value: &_storage._dlong) }()
-        case 10: try { try decoder.decodeSingularDoubleField(value: &_storage._dshort) }()
-        case 11: try { try decoder.decodeSingularDoubleField(value: &_storage._dlongMin) }()
-        case 12: try { try decoder.decodeSingularDoubleField(value: &_storage._dshortMin) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._klong) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._kshort) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._dlong) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._dshort) }()
+        case 11: try { try decoder.decodeSingularMessageField(value: &_storage._dlongMin) }()
+        case 12: try { try decoder.decodeSingularMessageField(value: &_storage._dshortMin) }()
         case 13: try { try decoder.decodeSingularBoolField(value: &_storage._shortEnabledFlag) }()
         case 14: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._exchange) }()
@@ -4607,7 +4803,7 @@ extension Instrument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
         case 20: try { try decoder.decodeSingularBoolField(value: &_storage._otcFlag) }()
         case 21: try { try decoder.decodeSingularBoolField(value: &_storage._buyAvailableFlag) }()
         case 22: try { try decoder.decodeSingularBoolField(value: &_storage._sellAvailableFlag) }()
-        case 23: try { try decoder.decodeSingularFloatField(value: &_storage._minPriceIncrement) }()
+        case 23: try { try decoder.decodeSingularMessageField(value: &_storage._minPriceIncrement) }()
         case 24: try { try decoder.decodeSingularBoolField(value: &_storage._apiTradeAvailableFlag) }()
         default: break
         }
@@ -4617,6 +4813,10 @@ extension Instrument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
       if !_storage._figi.isEmpty {
         try visitor.visitSingularStringField(value: _storage._figi, fieldNumber: 1)
       }
@@ -4635,24 +4835,24 @@ extension Instrument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       if !_storage._currency.isEmpty {
         try visitor.visitSingularStringField(value: _storage._currency, fieldNumber: 6)
       }
-      if _storage._klong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._klong, fieldNumber: 7)
-      }
-      if _storage._kshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._kshort, fieldNumber: 8)
-      }
-      if _storage._dlong != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlong, fieldNumber: 9)
-      }
-      if _storage._dshort != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshort, fieldNumber: 10)
-      }
-      if _storage._dlongMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dlongMin, fieldNumber: 11)
-      }
-      if _storage._dshortMin != 0 {
-        try visitor.visitSingularDoubleField(value: _storage._dshortMin, fieldNumber: 12)
-      }
+      try { if let v = _storage._klong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._kshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._dlong {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._dshort {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._dlongMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._dshortMin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      } }()
       if _storage._shortEnabledFlag != false {
         try visitor.visitSingularBoolField(value: _storage._shortEnabledFlag, fieldNumber: 13)
       }
@@ -4683,9 +4883,9 @@ extension Instrument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       if _storage._sellAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._sellAvailableFlag, fieldNumber: 22)
       }
-      if _storage._minPriceIncrement != 0 {
-        try visitor.visitSingularFloatField(value: _storage._minPriceIncrement, fieldNumber: 23)
-      }
+      try { if let v = _storage._minPriceIncrement {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 23)
+      } }()
       if _storage._apiTradeAvailableFlag != false {
         try visitor.visitSingularBoolField(value: _storage._apiTradeAvailableFlag, fieldNumber: 24)
       }

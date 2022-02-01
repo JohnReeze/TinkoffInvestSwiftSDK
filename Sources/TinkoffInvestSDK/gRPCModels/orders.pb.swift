@@ -450,7 +450,7 @@ public struct PostOrderResponse {
   /// Clears the value of `executedCommission`. Subsequent reads from it will return its default value.
   public mutating func clearExecutedCommission() {_uniqueStorage()._executedCommission = nil}
 
-  ///Значение НКД (накопленного купонного дохода) на дату. Подробнее: [НКД при выставлении торговых поручений](/investAPI/head-orders#coupon)
+  ///Значение НКД (накопленного купонного дохода) на дату. Подробнее: [НКД при выставлении торговых поручений](https://tinkoff.github.io/investAPI/head-orders#coupon)
   public var aciValue: MoneyValue {
     get {return _storage._aciValue ?? MoneyValue()}
     set {_uniqueStorage()._aciValue = newValue}

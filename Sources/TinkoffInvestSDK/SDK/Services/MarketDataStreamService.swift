@@ -38,7 +38,7 @@ final class GRPCMarketDataStreamService: BaseCombineGRPCService, MarketDataStrea
         return inputSubject.eraseToAnyPublisher()
     }
 
-    private var inputSubject = PassthroughSubject<MarketDataRequest, Error>()
+    private var inputSubject = CurrentValueSubject<MarketDataRequest, Error>(MarketDataRequest())
     private var currentResponsePublisher: MarketDataPublisher?
 
     // MARK: - MarketDataStreamService
@@ -108,9 +108,7 @@ final class GRPCMarketDataStreamService: BaseCombineGRPCService, MarketDataStrea
             return currentResponsePublisher
         }
 
-        defer {
-            self.inputSubject.send(request)
-        }
+        inputSubject.send(request)
 
         let responsePublisher = executor.call(client.marketDataStream)(currentRequestPublsher)
         self.currentResponsePublisher = responsePublisher
