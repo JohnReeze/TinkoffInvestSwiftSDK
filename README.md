@@ -32,6 +32,40 @@ sdk.userService.getAccounts().flatMap {
 }.store(in: &cancellables)
 
 ```
+### gRPC Streams + Combine
+
+Another new feature of [Tinkoff Invest API V2](https://github.com/Tinkoff/investAPI) is that now it's possible to subscribe to realtime streams for any instrument. Underhood it uses a bidirectional streaming RPC. So with the help of Combine Publishers we hide all complexity of gRPC streams as follows
+
+```swift
+
+// as we first address market stream, it creates a stream and now we may have multiple receiveValue calls over time
+sdk.marketDataServiceStream.subscribeToCandels(figi: "BBG00ZKY1P71", interval: .oneMinute).sink { result in
+   print(result)
+} receiveValue: { result in
+   switch result.payload {
+   case .trade(let trade):
+      print(trade.price.asAmount)
+   default:
+      break
+   }
+}.store(in: &cancellables)
+
+// as market stream is now active, it just subscribes to new trades for provided figi
+sdk.marketDataServiceStream.subscribeToTrades(figi: "BBG00ZKY1P71").sink { result in
+   print(result)
+} receiveValue: { result in
+   switch result.payload {
+   case .candle(let candle):  // note that receiveValue in both sink closures calls every time the stream gets any message (can be a ping message with no payload)
+      print(candle.figi)     // so it's better to check result.payload value before perform any other actions 
+   default:
+      break
+   }
+}.store(in: &cancellables)
+
+// closes the stream 
+sdk.marketDataServiceStream.cancelAllSubscribtions()
+
+```
 
 ### Adding TinkoffInvestSwiftSDK to Your Project
 
