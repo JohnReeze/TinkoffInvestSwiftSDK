@@ -6,15 +6,15 @@
 //
 
 public enum MoneyCurrency: String, Codable {
-    case chf = "CHF"
-    case cny = "CNY"
-    case eur = "EUR"
-    case gbp = "GBP"
-    case hkd = "HKD"
-    case jpy = "JPY"
-    case rub = "RUB"
-    case `try` = "TRY"
-    case usd = "USD"
+    case chf = "chf"
+    case cny = "cny"
+    case eur = "eur"
+    case gbp = "gbp"
+    case hkd = "hkd"
+    case jpy = "jpy"
+    case rub = "rub"
+    case `try` = "try"
+    case usd = "usd"
 
     public var sign: String {
         switch self {
