@@ -15,7 +15,9 @@ public class TinkoffInvestSDK {
 
     // MARK: - Initialization
 
-    public init(appName: String, tokenProvider: TinkoffInvestTokenProvider, sandbox sandboxTokenProvider: TinkoffInvestTokenProvider) {
+    public init(appName: String = "JohnReeze.TinkoffInvestSwiftSDK",
+                tokenProvider: TinkoffInvestTokenProvider,
+                sandbox sandboxTokenProvider: TinkoffInvestTokenProvider) {
         self.appName = appName
         self.commonTokenProvider = tokenProvider
         self.sandboxTokenProvider = sandboxTokenProvider
