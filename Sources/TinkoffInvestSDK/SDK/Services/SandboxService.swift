@@ -27,7 +27,7 @@ final class GRPCSandboxService: BaseCombineGRPCService, SandboxService {
 
     private lazy var client = SandboxServiceClient(channel: channel)
 
-    // MARK: - UserService
+    // MARK: - SandboxService
 
     func openAccount() -> AnyPublisher<OpenSandboxAccountResponse, RPCError> {
         return executor.call(client.openSandboxAccount)(OpenSandboxAccountRequest())
