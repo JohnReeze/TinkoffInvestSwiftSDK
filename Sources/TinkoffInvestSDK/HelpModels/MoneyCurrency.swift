@@ -5,16 +5,16 @@
 //  Created by m.monakov on 20.01.2022.
 //
 
-public enum MoneyCurrency: String, Codable {
-    case chf = "chf"
-    case cny = "cny"
-    case eur = "eur"
-    case gbp = "gbp"
-    case hkd = "hkd"
-    case jpy = "jpy"
-    case rub = "rub"
-    case `try` = "try"
-    case usd = "usd"
+public enum MoneyCurrency: String, Codable, CaseIterable {
+    case chf = "CHF"
+    case cny = "CNY"
+    case eur = "EUR"
+    case gbp = "GBP"
+    case hkd = "HKD"
+    case jpy = "JPY"
+    case rub = "RUB"
+    case `try` = "TRY"
+    case usd = "USD"
 
     public var sign: String {
         switch self {
@@ -28,5 +28,15 @@ public enum MoneyCurrency: String, Codable {
         case .hkd: return "HKD"
         case .chf: return "CHF"
         }
+    }
+}
+
+extension MoneyCurrency {
+
+    public init?(rawValue: String) {
+        guard let value = MoneyCurrency.allCases
+            .first(where: { $0.rawValue == rawValue.uppercased() })
+        else { return nil }
+        self = value
     }
 }
