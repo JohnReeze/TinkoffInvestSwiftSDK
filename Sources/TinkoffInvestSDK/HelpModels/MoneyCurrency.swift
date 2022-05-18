@@ -5,7 +5,7 @@
 //  Created by m.monakov on 20.01.2022.
 //
 
-public enum MoneyCurrency: String, Codable {
+public enum MoneyCurrency: String, Codable, CaseIterable {
     case chf = "CHF"
     case cny = "CNY"
     case eur = "EUR"
@@ -28,5 +28,15 @@ public enum MoneyCurrency: String, Codable {
         case .hkd: return "HKD"
         case .chf: return "CHF"
         }
+    }
+}
+
+extension MoneyCurrency {
+
+    public init?(rawValue: String) {
+        guard let value = MoneyCurrency.allCases
+            .first(where: { $0.rawValue == rawValue.uppercased() })
+        else { return nil }
+        self = value
     }
 }
