@@ -1,6 +1,6 @@
 //
 //  SandboxService.swift
-//  
+//  TinkoffInvestSwiftSDK
 //
 //  Created by Andrey Vasilev on 16.05.2022.
 //
@@ -9,21 +9,26 @@ import Combine
 import GRPC
 import CombineGRPC
 
-public protocol SandboxService {
+public protocol SandboxService: OrdersService {
+    
     func openAccount() -> AnyPublisher<OpenSandboxAccountResponse, RPCError>
+    
     func getAccounts() -> AnyPublisher<GetAccountsResponse, RPCError>
+    
     func closeAccount(accountID: String) -> AnyPublisher<CloseSandboxAccountResponse, RPCError>
-    func postOrder(request: PostOrderRequest) -> AnyPublisher<PostOrderResponse, RPCError>
-    func getOrders(accountID: String) -> AnyPublisher<GetOrdersResponse, RPCError>
-    func cancelOrder(accountID: String, orderID: String) -> AnyPublisher<CancelOrderResponse, RPCError>
-    func getOrderState(accountID: String, orderID: String) -> AnyPublisher<OrderState, RPCError>
+    
     func getPositions(accountID: String) -> AnyPublisher<PositionsResponse, RPCError>
+    
     func getOperations(request: OperationsRequest) -> AnyPublisher<OperationsResponse, RPCError>
+    
     func getPortfolio(accountID: String) -> AnyPublisher<PortfolioResponse, RPCError>
+    
     func payIn(accountID: String, amount: MoneyValue) -> AnyPublisher<SandboxPayInResponse, RPCError>
 }
 
 final class GRPCSandboxService: BaseCombineGRPCService, SandboxService {
+
+    // MARK: - Private
 
     private lazy var client = SandboxServiceClient(channel: channel)
 
