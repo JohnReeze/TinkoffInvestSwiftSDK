@@ -11,13 +11,13 @@ public class TinkoffInvestSDK {
     private let appName: String
 
     private let commonTokenProvider: TinkoffInvestTokenProvider
-    private let sandboxTokenProvider: TinkoffInvestTokenProvider
+    private let sandboxTokenProvider: TinkoffInvestTokenProvider?
 
     // MARK: - Initialization
 
     public init(appName: String = "JohnReeze.TinkoffInvestSwiftSDK",
                 tokenProvider: TinkoffInvestTokenProvider,
-                sandbox sandboxTokenProvider: TinkoffInvestTokenProvider) {
+                sandbox sandboxTokenProvider: TinkoffInvestTokenProvider? = nil) {
         self.appName = appName
         self.commonTokenProvider = tokenProvider
         self.sandboxTokenProvider = sandboxTokenProvider
@@ -37,7 +37,10 @@ public class TinkoffInvestSDK {
 
     public lazy var stopOrdersService: StopOrdersService = GRPCStopOrdersService(tokenProvider: commonTokenProvider, appName: appName)
 
-    public lazy var sandboxService: SandboxService = GRPCSandboxService(tokenProvider: sandboxTokenProvider, appName: appName)
+    public lazy var ordersService: OrdersService = GRPCOrdersService(tokenProvider: commonTokenProvider, appName: appName)
 
-    public lazy var ordersService: OrdersService = GRPCOrdersService(tokenProvider: sandboxTokenProvider, appName: appName)
+    public lazy var sandboxService: SandboxService? = {
+        guard let token = sandboxTokenProvider else { return nil }
+        return GRPCSandboxService(tokenProvider: token, appName: appName)
+    }()
 }
