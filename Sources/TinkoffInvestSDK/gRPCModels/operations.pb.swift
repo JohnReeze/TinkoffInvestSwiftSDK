@@ -768,6 +768,25 @@ public struct PortfolioPosition {
     get {return _storage._currentPrice ?? MoneyValue()}
     set {_uniqueStorage()._currentPrice = newValue}
   }
+    
+  ///Средняя цена позиции по методу FIFO. Возможна задержка до секунды для пересчёта.
+  public var averagePositionPriceFifo: MoneyValue {
+    get {return _storage._averagePositionPriceFifo ?? MoneyValue()}
+    set {_uniqueStorage()._averagePositionPriceFifo = newValue}
+  }
+
+  ///Количество лотов в портфеле.
+  public var quantityLots: Quotation {
+    get {return _storage._quantityLots ?? Quotation()}
+    set {_uniqueStorage()._quantityLots = newValue}
+  }
+    
+  ///Заблокировано
+  public var blocked: Bool {
+    get {return _storage._blocked ?? false}
+    set {_uniqueStorage()._blocked = newValue}
+  }
+  
   /// Returns true if `currentPrice` has been explicitly set.
   public var hasCurrentPrice: Bool {return _storage._currentPrice != nil}
   /// Clears the value of `currentPrice`. Subsequent reads from it will return its default value.
@@ -1460,6 +1479,9 @@ extension PortfolioPosition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     6: .standard(proto: "current_nkd"),
     7: .standard(proto: "average_position_price_pt"),
     8: .standard(proto: "current_price"),
+    9: .standard(proto: "average_position_price_fifo"),
+    10: .standard(proto: "quantity_lots"),
+    21: .standard(proto: "blocked"),
   ]
 
   fileprivate class _StorageClass {
@@ -1471,6 +1493,9 @@ extension PortfolioPosition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _currentNkd: MoneyValue? = nil
     var _averagePositionPricePt: Quotation? = nil
     var _currentPrice: MoneyValue? = nil
+    var _averagePositionPriceFifo: MoneyValue? = nil
+    var _quantityLots: Quotation? = nil
+    var _blocked: Bool? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -1485,6 +1510,9 @@ extension PortfolioPosition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _currentNkd = source._currentNkd
       _averagePositionPricePt = source._averagePositionPricePt
       _currentPrice = source._currentPrice
+      _averagePositionPriceFifo = source._averagePositionPriceFifo
+      _quantityLots = source._quantityLots
+      _blocked = source._blocked
     }
   }
 
@@ -1511,6 +1539,9 @@ extension PortfolioPosition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 6: try { try decoder.decodeSingularMessageField(value: &_storage._currentNkd) }()
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._averagePositionPricePt) }()
         case 8: try { try decoder.decodeSingularMessageField(value: &_storage._currentPrice) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._averagePositionPriceFifo) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._quantityLots) }()
+        case 21: try { try decoder.decodeSingularBoolField(value: &_storage._blocked) }()
         default: break
         }
       }
@@ -1547,6 +1578,15 @@ extension PortfolioPosition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       try { if let v = _storage._currentPrice {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
       } }()
+      try { if let v = _storage._averagePositionPriceFifo {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._quantityLots {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._blocked {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 21)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1564,6 +1604,9 @@ extension PortfolioPosition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._currentNkd != rhs_storage._currentNkd {return false}
         if _storage._averagePositionPricePt != rhs_storage._averagePositionPricePt {return false}
         if _storage._currentPrice != rhs_storage._currentPrice {return false}
+        if _storage._averagePositionPriceFifo != rhs_storage._averagePositionPriceFifo {return false}
+        if _storage._quantityLots != rhs_storage._quantityLots {return false}
+        if _storage._blocked != rhs_storage._blocked {return false}
         return true
       }
       if !storagesAreEqual {return false}
