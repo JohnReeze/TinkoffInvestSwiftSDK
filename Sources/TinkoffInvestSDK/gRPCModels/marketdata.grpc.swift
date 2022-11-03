@@ -51,6 +51,16 @@ public protocol MarketDataServiceClientProtocol: GRPCClient {
     _ request: GetTradingStatusRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<GetTradingStatusRequest, GetTradingStatusResponse>
+
+  func getLastTrades(
+    _ request: GetLastTradesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetLastTradesRequest, GetLastTradesResponse>
+
+  func getClosePrices(
+    _ request: GetClosePricesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetClosePricesRequest, GetClosePricesResponse>
 }
 
 extension MarketDataServiceClientProtocol {
@@ -129,6 +139,42 @@ extension MarketDataServiceClientProtocol {
       interceptors: self.interceptors?.makeGetTradingStatusInterceptors() ?? []
     )
   }
+
+  ///Метод запроса обезличенных сделок за последний час.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetLastTrades.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getLastTrades(
+    _ request: GetLastTradesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetLastTradesRequest, GetLastTradesResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.MarketDataService/GetLastTrades",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetLastTradesInterceptors() ?? []
+    )
+  }
+
+  ///Метод запроса цен закрытия торговой сессии по инструментам.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetClosePrices.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getClosePrices(
+    _ request: GetClosePricesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetClosePricesRequest, GetClosePricesResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.MarketDataService/GetClosePrices",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetClosePricesInterceptors() ?? []
+    )
+  }
 }
 
 public protocol MarketDataServiceClientInterceptorFactoryProtocol {
@@ -144,6 +190,12 @@ public protocol MarketDataServiceClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'getTradingStatus'.
   func makeGetTradingStatusInterceptors() -> [ClientInterceptor<GetTradingStatusRequest, GetTradingStatusResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getLastTrades'.
+  func makeGetLastTradesInterceptors() -> [ClientInterceptor<GetLastTradesRequest, GetLastTradesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getClosePrices'.
+  func makeGetClosePricesInterceptors() -> [ClientInterceptor<GetClosePricesRequest, GetClosePricesResponse>]
 }
 
 public final class MarketDataServiceClient: MarketDataServiceClientProtocol {
@@ -177,6 +229,12 @@ public protocol MarketDataStreamServiceClientProtocol: GRPCClient {
     callOptions: CallOptions?,
     handler: @escaping (MarketDataResponse) -> Void
   ) -> BidirectionalStreamingCall<MarketDataRequest, MarketDataResponse>
+
+  func marketDataServerSideStream(
+    _ request: MarketDataServerSideStreamRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (MarketDataResponse) -> Void
+  ) -> ServerStreamingCall<MarketDataServerSideStreamRequest, MarketDataResponse>
 }
 
 extension MarketDataStreamServiceClientProtocol {
@@ -204,12 +262,36 @@ extension MarketDataStreamServiceClientProtocol {
       handler: handler
     )
   }
+
+  ///Server-side стрим предоставления биржевой информации.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to MarketDataServerSideStream.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  public func marketDataServerSideStream(
+    _ request: MarketDataServerSideStreamRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (MarketDataResponse) -> Void
+  ) -> ServerStreamingCall<MarketDataServerSideStreamRequest, MarketDataResponse> {
+    return self.makeServerStreamingCall(
+      path: "/tinkoff.public.invest.api.contract.v1.MarketDataStreamService/MarketDataServerSideStream",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeMarketDataServerSideStreamInterceptors() ?? [],
+      handler: handler
+    )
+  }
 }
 
 public protocol MarketDataStreamServiceClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'marketDataStream'.
   func makeMarketDataStreamInterceptors() -> [ClientInterceptor<MarketDataRequest, MarketDataResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'marketDataServerSideStream'.
+  func makeMarketDataServerSideStreamInterceptors() -> [ClientInterceptor<MarketDataServerSideStreamRequest, MarketDataResponse>]
 }
 
 public final class MarketDataStreamServiceClient: MarketDataStreamServiceClientProtocol {
@@ -251,6 +333,12 @@ public protocol MarketDataServiceProvider: CallHandlerProvider {
 
   ///Метод запроса статуса торгов по инструментам.
   func getTradingStatus(request: GetTradingStatusRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetTradingStatusResponse>
+
+  ///Метод запроса обезличенных сделок за последний час.
+  func getLastTrades(request: GetLastTradesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetLastTradesResponse>
+
+  ///Метод запроса цен закрытия торговой сессии по инструментам.
+  func getClosePrices(request: GetClosePricesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetClosePricesResponse>
 }
 
 extension MarketDataServiceProvider {
@@ -299,6 +387,24 @@ extension MarketDataServiceProvider {
         userFunction: self.getTradingStatus(request:context:)
       )
 
+    case "GetLastTrades":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetLastTradesRequest>(),
+        responseSerializer: ProtobufSerializer<GetLastTradesResponse>(),
+        interceptors: self.interceptors?.makeGetLastTradesInterceptors() ?? [],
+        userFunction: self.getLastTrades(request:context:)
+      )
+
+    case "GetClosePrices":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetClosePricesRequest>(),
+        responseSerializer: ProtobufSerializer<GetClosePricesResponse>(),
+        interceptors: self.interceptors?.makeGetClosePricesInterceptors() ?? [],
+        userFunction: self.getClosePrices(request:context:)
+      )
+
     default:
       return nil
     }
@@ -322,6 +428,14 @@ public protocol MarketDataServiceServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'getTradingStatus'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetTradingStatusInterceptors() -> [ServerInterceptor<GetTradingStatusRequest, GetTradingStatusResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getLastTrades'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetLastTradesInterceptors() -> [ServerInterceptor<GetLastTradesRequest, GetLastTradesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getClosePrices'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetClosePricesInterceptors() -> [ServerInterceptor<GetClosePricesRequest, GetClosePricesResponse>]
 }
 /// To build a server, implement a class that conforms to this protocol.
 public protocol MarketDataStreamServiceProvider: CallHandlerProvider {
@@ -329,6 +443,9 @@ public protocol MarketDataStreamServiceProvider: CallHandlerProvider {
 
   ///Bi-directional стрим предоставления биржевой информации.
   func marketDataStream(context: StreamingResponseCallContext<MarketDataResponse>) -> EventLoopFuture<(StreamEvent<MarketDataRequest>) -> Void>
+
+  ///Server-side стрим предоставления биржевой информации.
+  func marketDataServerSideStream(request: MarketDataServerSideStreamRequest, context: StreamingResponseCallContext<MarketDataResponse>) -> EventLoopFuture<GRPCStatus>
 }
 
 extension MarketDataStreamServiceProvider {
@@ -350,6 +467,15 @@ extension MarketDataStreamServiceProvider {
         observerFactory: self.marketDataStream(context:)
       )
 
+    case "MarketDataServerSideStream":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<MarketDataServerSideStreamRequest>(),
+        responseSerializer: ProtobufSerializer<MarketDataResponse>(),
+        interceptors: self.interceptors?.makeMarketDataServerSideStreamInterceptors() ?? [],
+        userFunction: self.marketDataServerSideStream(request:context:)
+      )
+
     default:
       return nil
     }
@@ -361,4 +487,8 @@ public protocol MarketDataStreamServiceServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'marketDataStream'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeMarketDataStreamInterceptors() -> [ServerInterceptor<MarketDataRequest, MarketDataResponse>]
+
+  /// - Returns: Interceptors to use when handling 'marketDataServerSideStream'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeMarketDataServerSideStreamInterceptors() -> [ServerInterceptor<MarketDataServerSideStreamRequest, MarketDataResponse>]
 }

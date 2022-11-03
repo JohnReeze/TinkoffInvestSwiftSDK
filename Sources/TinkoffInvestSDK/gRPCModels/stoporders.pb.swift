@@ -24,13 +24,13 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 public enum StopOrderDirection: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
-  ///Значение не указано
+  ///Значение не указано.
   case unspecified // = 0
 
-  ///Покупка
+  ///Покупка.
   case buy // = 1
 
-  ///Продажа
+  ///Продажа.
   case sell // = 2
   case UNRECOGNIZED(Int)
 
@@ -126,16 +126,16 @@ extension StopOrderExpirationType: CaseIterable {
 public enum StopOrderType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
-  ///Значение не указано
+  ///Значение не указано.
   case unspecified // = 0
 
-  ///Take-profit заявка
+  ///Take-profit заявка.
   case takeProfit // = 1
 
-  ///Stop-loss заявка
+  ///Stop-loss заявка.
   case stopLoss // = 2
 
-  ///Stop-limit заявка
+  ///Stop-limit заявка.
   case stopLimit // = 3
   case UNRECOGNIZED(Int)
 
@@ -179,19 +179,19 @@ extension StopOrderType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-///Запрос выставления стоп-заявки
+///Запрос выставления стоп-заявки.
 public struct PostStopOrderRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Figi-идентификатор инструмента
+  ///Figi-идентификатор инструмента.
   public var figi: String = String()
 
-  ///Количество лотов
+  ///Количество лотов.
   public var quantity: Int64 = 0
 
-  ///Цена лота
+  ///Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
   public var price: Quotation {
     get {return _price ?? Quotation()}
     set {_price = newValue}
@@ -201,7 +201,7 @@ public struct PostStopOrderRequest {
   /// Clears the value of `price`. Subsequent reads from it will return its default value.
   public mutating func clearPrice() {self._price = nil}
 
-  ///Стоп-цена заявки
+  ///Стоп-цена заявки за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
   public var stopPrice: Quotation {
     get {return _stopPrice ?? Quotation()}
     set {_stopPrice = newValue}
@@ -211,16 +211,16 @@ public struct PostStopOrderRequest {
   /// Clears the value of `stopPrice`. Subsequent reads from it will return its default value.
   public mutating func clearStopPrice() {self._stopPrice = nil}
 
-  ///Направление операции
+  ///Направление операции.
   public var direction: StopOrderDirection = .unspecified
 
-  ///Номер счёта
+  ///Номер счёта.
   public var accountID: String = String()
 
-  ///Тип экспирации заявки
+  ///Тип экспирации заявки.
   public var expirationType: StopOrderExpirationType = .unspecified
 
-  ///Тип заявки
+  ///Тип заявки.
   public var stopOrderType: StopOrderType = .unspecified
 
   ///Дата и время окончания действия стоп-заявки в часовом поясе UTC. **Для ExpirationType = GoodTillDate заполнение обязательно**.
@@ -262,7 +262,7 @@ public struct GetStopOrdersRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Идентификатор счёта клиента
+  ///Идентификатор счёта клиента.
   public var accountID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -276,7 +276,7 @@ public struct GetStopOrdersResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Массив стоп-заявок по счёту
+  ///Массив стоп-заявок по счёту.
   public var stopOrders: [StopOrder] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -290,7 +290,7 @@ public struct CancelStopOrderRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Идентификатор счёта клиента
+  ///Идентификатор счёта клиента.
   public var accountID: String = String()
 
   ///Уникальный идентификатор стоп-заявки.
@@ -307,7 +307,7 @@ public struct CancelStopOrderResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Время отмены заявки в часовом поясе UTC
+  ///Время отмены заявки в часовом поясе UTC.
   public var time: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _time ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_time = newValue}
@@ -330,43 +330,43 @@ public struct StopOrder {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Идентификатор-идентификатор стоп-заявки
+  ///Идентификатор-идентификатор стоп-заявки.
   public var stopOrderID: String {
     get {return _storage._stopOrderID}
     set {_uniqueStorage()._stopOrderID = newValue}
   }
 
-  ///Запрошено лотов
+  ///Запрошено лотов.
   public var lotsRequested: Int64 {
     get {return _storage._lotsRequested}
     set {_uniqueStorage()._lotsRequested = newValue}
   }
 
-  ///Figi-идентификатор инструмента
+  ///Figi-идентификатор инструмента.
   public var figi: String {
     get {return _storage._figi}
     set {_uniqueStorage()._figi = newValue}
   }
 
-  ///Направление операции
+  ///Направление операции.
   public var direction: StopOrderDirection {
     get {return _storage._direction}
     set {_uniqueStorage()._direction = newValue}
   }
 
-  ///Валюта стоп-заявки
+  ///Валюта стоп-заявки.
   public var currency: String {
     get {return _storage._currency}
     set {_uniqueStorage()._currency = newValue}
   }
 
-  ///Тип стоп-заявки
+  ///Тип стоп-заявки.
   public var orderType: StopOrderType {
     get {return _storage._orderType}
     set {_uniqueStorage()._orderType = newValue}
   }
 
-  ///Дата и время выставления заявки в часовом поясе UTC
+  ///Дата и время выставления заявки в часовом поясе UTC.
   public var createDate: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _storage._createDate ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_uniqueStorage()._createDate = newValue}
@@ -376,7 +376,7 @@ public struct StopOrder {
   /// Clears the value of `createDate`. Subsequent reads from it will return its default value.
   public mutating func clearCreateDate() {_uniqueStorage()._createDate = nil}
 
-  ///Дата и время конвертации стоп-заявки в биржевую в часовом поясе UTC
+  ///Дата и время конвертации стоп-заявки в биржевую в часовом поясе UTC.
   public var activationDateTime: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _storage._activationDateTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_uniqueStorage()._activationDateTime = newValue}
@@ -386,7 +386,7 @@ public struct StopOrder {
   /// Clears the value of `activationDateTime`. Subsequent reads from it will return its default value.
   public mutating func clearActivationDateTime() {_uniqueStorage()._activationDateTime = nil}
 
-  ///Дата и время снятия заявки в часовом поясе UTC
+  ///Дата и время снятия заявки в часовом поясе UTC.
   public var expirationTime: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _storage._expirationTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_uniqueStorage()._expirationTime = newValue}
@@ -396,7 +396,7 @@ public struct StopOrder {
   /// Clears the value of `expirationTime`. Subsequent reads from it will return its default value.
   public mutating func clearExpirationTime() {_uniqueStorage()._expirationTime = nil}
 
-  ///Цена заявки
+  ///Цена заявки за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
   public var price: MoneyValue {
     get {return _storage._price ?? MoneyValue()}
     set {_uniqueStorage()._price = newValue}
@@ -406,7 +406,7 @@ public struct StopOrder {
   /// Clears the value of `price`. Subsequent reads from it will return its default value.
   public mutating func clearPrice() {_uniqueStorage()._price = nil}
 
-  ///Цена активации стоп-заявки
+  ///Цена активации стоп-заявки за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
   public var stopPrice: MoneyValue {
     get {return _storage._stopPrice ?? MoneyValue()}
     set {_uniqueStorage()._stopPrice = newValue}

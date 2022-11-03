@@ -26,7 +26,7 @@ import SwiftProtobuf
 
 
 ///Сервис предназначен для получения: </br> **1**.
-///списка счетов пользователя; </br> **2**. маржинальных показателе по счёту.
+///списка счетов пользователя; </br> **2**. маржинальных показателей по счёту.
 ///
 /// Usage: instantiate `UsersServiceClient`, then call methods of this protocol to make API calls.
 public protocol UsersServiceClientProtocol: GRPCClient {
@@ -170,7 +170,7 @@ public final class UsersServiceClient: UsersServiceClientProtocol {
 }
 
 ///Сервис предназначен для получения: </br> **1**.
-///списка счетов пользователя; </br> **2**. маржинальных показателе по счёту.
+///списка счетов пользователя; </br> **2**. маржинальных показателей по счёту.
 ///
 /// To build a server, implement a class that conforms to this protocol.
 public protocol UsersServiceProvider: CallHandlerProvider {

@@ -49,6 +49,11 @@ public protocol InstrumentsServiceClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<InstrumentsRequest, BondsResponse>
 
+  func getBondCoupons(
+    _ request: GetBondCouponsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetBondCouponsRequest, GetBondCouponsResponse>
+
   func currencyBy(
     _ request: InstrumentRequest,
     callOptions: CallOptions?
@@ -79,6 +84,16 @@ public protocol InstrumentsServiceClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<InstrumentsRequest, FuturesResponse>
 
+  func optionBy(
+    _ request: InstrumentRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<InstrumentRequest, OptionResponse>
+
+  func options(
+    _ request: InstrumentsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<InstrumentsRequest, OptionsResponse>
+
   func shareBy(
     _ request: InstrumentRequest,
     callOptions: CallOptions?
@@ -108,6 +123,46 @@ public protocol InstrumentsServiceClientProtocol: GRPCClient {
     _ request: GetDividendsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<GetDividendsRequest, GetDividendsResponse>
+
+  func getAssetBy(
+    _ request: AssetRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<AssetRequest, AssetResponse>
+
+  func getAssets(
+    _ request: AssetsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<AssetsRequest, AssetsResponse>
+
+  func getFavorites(
+    _ request: GetFavoritesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetFavoritesRequest, GetFavoritesResponse>
+
+  func editFavorites(
+    _ request: EditFavoritesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<EditFavoritesRequest, EditFavoritesResponse>
+
+  func getCountries(
+    _ request: GetCountriesRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetCountriesRequest, GetCountriesResponse>
+
+  func findInstrument(
+    _ request: FindInstrumentRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<FindInstrumentRequest, FindInstrumentResponse>
+
+  func getBrands(
+    _ request: GetBrandsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetBrandsRequest, GetBrandsResponse>
+
+  func getBrandBy(
+    _ request: GetBrandRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetBrandRequest, Brand>
 }
 
 extension InstrumentsServiceClientProtocol {
@@ -166,6 +221,24 @@ extension InstrumentsServiceClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makeBondsInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения графика выплат купонов по облигации.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetBondCoupons.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getBondCoupons(
+    _ request: GetBondCouponsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetBondCouponsRequest, GetBondCouponsResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetBondCoupons",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBondCouponsInterceptors() ?? []
     )
   }
 
@@ -277,6 +350,42 @@ extension InstrumentsServiceClientProtocol {
     )
   }
 
+  ///Метод получения опциона по его идентификатору.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to OptionBy.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func optionBy(
+    _ request: InstrumentRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<InstrumentRequest, OptionResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/OptionBy",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeOptionByInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения списка опционов.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to Options.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func options(
+    _ request: InstrumentsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<InstrumentsRequest, OptionsResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/Options",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeOptionsInterceptors() ?? []
+    )
+  }
+
   ///Метод получения акции по её идентификатору.
   ///
   /// - Parameters:
@@ -384,6 +493,150 @@ extension InstrumentsServiceClientProtocol {
       interceptors: self.interceptors?.makeGetDividendsInterceptors() ?? []
     )
   }
+
+  ///Метод получения актива по его идентификатору.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetAssetBy.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getAssetBy(
+    _ request: AssetRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<AssetRequest, AssetResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetAssetBy",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetAssetByInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения списка активов.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetAssets.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getAssets(
+    _ request: AssetsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<AssetsRequest, AssetsResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetAssets",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetAssetsInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения списка избранных инструментов.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetFavorites.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getFavorites(
+    _ request: GetFavoritesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetFavoritesRequest, GetFavoritesResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetFavorites",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetFavoritesInterceptors() ?? []
+    )
+  }
+
+  ///Метод редактирования списка избранных инструментов.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to EditFavorites.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func editFavorites(
+    _ request: EditFavoritesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<EditFavoritesRequest, EditFavoritesResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/EditFavorites",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeEditFavoritesInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения списка стран.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetCountries.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getCountries(
+    _ request: GetCountriesRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetCountriesRequest, GetCountriesResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetCountries",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetCountriesInterceptors() ?? []
+    )
+  }
+
+  ///Метод поиска инструмента.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to FindInstrument.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func findInstrument(
+    _ request: FindInstrumentRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<FindInstrumentRequest, FindInstrumentResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/FindInstrument",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeFindInstrumentInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения списка брендов.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetBrands.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getBrands(
+    _ request: GetBrandsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetBrandsRequest, GetBrandsResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetBrands",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBrandsInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения бренда по его идентификатору.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetBrandBy.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getBrandBy(
+    _ request: GetBrandRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetBrandRequest, Brand> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetBrandBy",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBrandByInterceptors() ?? []
+    )
+  }
 }
 
 public protocol InstrumentsServiceClientInterceptorFactoryProtocol {
@@ -396,6 +649,9 @@ public protocol InstrumentsServiceClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'bonds'.
   func makeBondsInterceptors() -> [ClientInterceptor<InstrumentsRequest, BondsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getBondCoupons'.
+  func makeGetBondCouponsInterceptors() -> [ClientInterceptor<GetBondCouponsRequest, GetBondCouponsResponse>]
 
   /// - Returns: Interceptors to use when invoking 'currencyBy'.
   func makeCurrencyByInterceptors() -> [ClientInterceptor<InstrumentRequest, CurrencyResponse>]
@@ -415,6 +671,12 @@ public protocol InstrumentsServiceClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'futures'.
   func makeFuturesInterceptors() -> [ClientInterceptor<InstrumentsRequest, FuturesResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'optionBy'.
+  func makeOptionByInterceptors() -> [ClientInterceptor<InstrumentRequest, OptionResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'options'.
+  func makeOptionsInterceptors() -> [ClientInterceptor<InstrumentsRequest, OptionsResponse>]
+
   /// - Returns: Interceptors to use when invoking 'shareBy'.
   func makeShareByInterceptors() -> [ClientInterceptor<InstrumentRequest, ShareResponse>]
 
@@ -432,6 +694,30 @@ public protocol InstrumentsServiceClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'getDividends'.
   func makeGetDividendsInterceptors() -> [ClientInterceptor<GetDividendsRequest, GetDividendsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getAssetBy'.
+  func makeGetAssetByInterceptors() -> [ClientInterceptor<AssetRequest, AssetResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getAssets'.
+  func makeGetAssetsInterceptors() -> [ClientInterceptor<AssetsRequest, AssetsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getFavorites'.
+  func makeGetFavoritesInterceptors() -> [ClientInterceptor<GetFavoritesRequest, GetFavoritesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'editFavorites'.
+  func makeEditFavoritesInterceptors() -> [ClientInterceptor<EditFavoritesRequest, EditFavoritesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getCountries'.
+  func makeGetCountriesInterceptors() -> [ClientInterceptor<GetCountriesRequest, GetCountriesResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'findInstrument'.
+  func makeFindInstrumentInterceptors() -> [ClientInterceptor<FindInstrumentRequest, FindInstrumentResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getBrands'.
+  func makeGetBrandsInterceptors() -> [ClientInterceptor<GetBrandsRequest, GetBrandsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getBrandBy'.
+  func makeGetBrandByInterceptors() -> [ClientInterceptor<GetBrandRequest, Brand>]
 }
 
 public final class InstrumentsServiceClient: InstrumentsServiceClientProtocol {
@@ -473,6 +759,9 @@ public protocol InstrumentsServiceProvider: CallHandlerProvider {
   ///Метод получения списка облигаций.
   func bonds(request: InstrumentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<BondsResponse>
 
+  ///Метод получения графика выплат купонов по облигации.
+  func getBondCoupons(request: GetBondCouponsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetBondCouponsResponse>
+
   ///Метод получения валюты по её идентификатору.
   func currencyBy(request: InstrumentRequest, context: StatusOnlyCallContext) -> EventLoopFuture<CurrencyResponse>
 
@@ -491,6 +780,12 @@ public protocol InstrumentsServiceProvider: CallHandlerProvider {
   ///Метод получения списка фьючерсов.
   func futures(request: InstrumentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<FuturesResponse>
 
+  ///Метод получения опциона по его идентификатору.
+  func optionBy(request: InstrumentRequest, context: StatusOnlyCallContext) -> EventLoopFuture<OptionResponse>
+
+  ///Метод получения списка опционов.
+  func options(request: InstrumentsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<OptionsResponse>
+
   ///Метод получения акции по её идентификатору.
   func shareBy(request: InstrumentRequest, context: StatusOnlyCallContext) -> EventLoopFuture<ShareResponse>
 
@@ -508,6 +803,30 @@ public protocol InstrumentsServiceProvider: CallHandlerProvider {
 
   ///Метод для получения событий выплаты дивидендов по инструменту.
   func getDividends(request: GetDividendsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetDividendsResponse>
+
+  ///Метод получения актива по его идентификатору.
+  func getAssetBy(request: AssetRequest, context: StatusOnlyCallContext) -> EventLoopFuture<AssetResponse>
+
+  ///Метод получения списка активов.
+  func getAssets(request: AssetsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<AssetsResponse>
+
+  ///Метод получения списка избранных инструментов.
+  func getFavorites(request: GetFavoritesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetFavoritesResponse>
+
+  ///Метод редактирования списка избранных инструментов.
+  func editFavorites(request: EditFavoritesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<EditFavoritesResponse>
+
+  ///Метод получения списка стран.
+  func getCountries(request: GetCountriesRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetCountriesResponse>
+
+  ///Метод поиска инструмента.
+  func findInstrument(request: FindInstrumentRequest, context: StatusOnlyCallContext) -> EventLoopFuture<FindInstrumentResponse>
+
+  ///Метод получения списка брендов.
+  func getBrands(request: GetBrandsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetBrandsResponse>
+
+  ///Метод получения бренда по его идентификатору.
+  func getBrandBy(request: GetBrandRequest, context: StatusOnlyCallContext) -> EventLoopFuture<Brand>
 }
 
 extension InstrumentsServiceProvider {
@@ -545,6 +864,15 @@ extension InstrumentsServiceProvider {
         responseSerializer: ProtobufSerializer<BondsResponse>(),
         interceptors: self.interceptors?.makeBondsInterceptors() ?? [],
         userFunction: self.bonds(request:context:)
+      )
+
+    case "GetBondCoupons":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetBondCouponsRequest>(),
+        responseSerializer: ProtobufSerializer<GetBondCouponsResponse>(),
+        interceptors: self.interceptors?.makeGetBondCouponsInterceptors() ?? [],
+        userFunction: self.getBondCoupons(request:context:)
       )
 
     case "CurrencyBy":
@@ -601,6 +929,24 @@ extension InstrumentsServiceProvider {
         userFunction: self.futures(request:context:)
       )
 
+    case "OptionBy":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<InstrumentRequest>(),
+        responseSerializer: ProtobufSerializer<OptionResponse>(),
+        interceptors: self.interceptors?.makeOptionByInterceptors() ?? [],
+        userFunction: self.optionBy(request:context:)
+      )
+
+    case "Options":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<InstrumentsRequest>(),
+        responseSerializer: ProtobufSerializer<OptionsResponse>(),
+        interceptors: self.interceptors?.makeOptionsInterceptors() ?? [],
+        userFunction: self.options(request:context:)
+      )
+
     case "ShareBy":
       return UnaryServerHandler(
         context: context,
@@ -655,6 +1001,78 @@ extension InstrumentsServiceProvider {
         userFunction: self.getDividends(request:context:)
       )
 
+    case "GetAssetBy":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<AssetRequest>(),
+        responseSerializer: ProtobufSerializer<AssetResponse>(),
+        interceptors: self.interceptors?.makeGetAssetByInterceptors() ?? [],
+        userFunction: self.getAssetBy(request:context:)
+      )
+
+    case "GetAssets":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<AssetsRequest>(),
+        responseSerializer: ProtobufSerializer<AssetsResponse>(),
+        interceptors: self.interceptors?.makeGetAssetsInterceptors() ?? [],
+        userFunction: self.getAssets(request:context:)
+      )
+
+    case "GetFavorites":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetFavoritesRequest>(),
+        responseSerializer: ProtobufSerializer<GetFavoritesResponse>(),
+        interceptors: self.interceptors?.makeGetFavoritesInterceptors() ?? [],
+        userFunction: self.getFavorites(request:context:)
+      )
+
+    case "EditFavorites":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<EditFavoritesRequest>(),
+        responseSerializer: ProtobufSerializer<EditFavoritesResponse>(),
+        interceptors: self.interceptors?.makeEditFavoritesInterceptors() ?? [],
+        userFunction: self.editFavorites(request:context:)
+      )
+
+    case "GetCountries":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetCountriesRequest>(),
+        responseSerializer: ProtobufSerializer<GetCountriesResponse>(),
+        interceptors: self.interceptors?.makeGetCountriesInterceptors() ?? [],
+        userFunction: self.getCountries(request:context:)
+      )
+
+    case "FindInstrument":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<FindInstrumentRequest>(),
+        responseSerializer: ProtobufSerializer<FindInstrumentResponse>(),
+        interceptors: self.interceptors?.makeFindInstrumentInterceptors() ?? [],
+        userFunction: self.findInstrument(request:context:)
+      )
+
+    case "GetBrands":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetBrandsRequest>(),
+        responseSerializer: ProtobufSerializer<GetBrandsResponse>(),
+        interceptors: self.interceptors?.makeGetBrandsInterceptors() ?? [],
+        userFunction: self.getBrands(request:context:)
+      )
+
+    case "GetBrandBy":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetBrandRequest>(),
+        responseSerializer: ProtobufSerializer<Brand>(),
+        interceptors: self.interceptors?.makeGetBrandByInterceptors() ?? [],
+        userFunction: self.getBrandBy(request:context:)
+      )
+
     default:
       return nil
     }
@@ -674,6 +1092,10 @@ public protocol InstrumentsServiceServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'bonds'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeBondsInterceptors() -> [ServerInterceptor<InstrumentsRequest, BondsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getBondCoupons'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetBondCouponsInterceptors() -> [ServerInterceptor<GetBondCouponsRequest, GetBondCouponsResponse>]
 
   /// - Returns: Interceptors to use when handling 'currencyBy'.
   ///   Defaults to calling `self.makeInterceptors()`.
@@ -699,6 +1121,14 @@ public protocol InstrumentsServiceServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeFuturesInterceptors() -> [ServerInterceptor<InstrumentsRequest, FuturesResponse>]
 
+  /// - Returns: Interceptors to use when handling 'optionBy'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeOptionByInterceptors() -> [ServerInterceptor<InstrumentRequest, OptionResponse>]
+
+  /// - Returns: Interceptors to use when handling 'options'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeOptionsInterceptors() -> [ServerInterceptor<InstrumentsRequest, OptionsResponse>]
+
   /// - Returns: Interceptors to use when handling 'shareBy'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeShareByInterceptors() -> [ServerInterceptor<InstrumentRequest, ShareResponse>]
@@ -722,4 +1152,36 @@ public protocol InstrumentsServiceServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'getDividends'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetDividendsInterceptors() -> [ServerInterceptor<GetDividendsRequest, GetDividendsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getAssetBy'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetAssetByInterceptors() -> [ServerInterceptor<AssetRequest, AssetResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getAssets'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetAssetsInterceptors() -> [ServerInterceptor<AssetsRequest, AssetsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getFavorites'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetFavoritesInterceptors() -> [ServerInterceptor<GetFavoritesRequest, GetFavoritesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'editFavorites'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeEditFavoritesInterceptors() -> [ServerInterceptor<EditFavoritesRequest, EditFavoritesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getCountries'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetCountriesInterceptors() -> [ServerInterceptor<GetCountriesRequest, GetCountriesResponse>]
+
+  /// - Returns: Interceptors to use when handling 'findInstrument'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeFindInstrumentInterceptors() -> [ServerInterceptor<FindInstrumentRequest, FindInstrumentResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getBrands'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetBrandsInterceptors() -> [ServerInterceptor<GetBrandsRequest, GetBrandsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getBrandBy'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetBrandByInterceptors() -> [ServerInterceptor<GetBrandRequest, Brand>]
 }

@@ -52,6 +52,11 @@ public protocol SandboxServiceClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<PostOrderRequest, PostOrderResponse>
 
+  func replaceSandboxOrder(
+    _ request: ReplaceOrderRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<ReplaceOrderRequest, PostOrderResponse>
+
   func getSandboxOrders(
     _ request: GetOrdersRequest,
     callOptions: CallOptions?
@@ -77,6 +82,11 @@ public protocol SandboxServiceClientProtocol: GRPCClient {
     callOptions: CallOptions?
   ) -> UnaryCall<OperationsRequest, OperationsResponse>
 
+  func getSandboxOperationsByCursor(
+    _ request: GetOperationsByCursorRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetOperationsByCursorRequest, GetOperationsByCursorResponse>
+
   func getSandboxPortfolio(
     _ request: PortfolioRequest,
     callOptions: CallOptions?
@@ -86,6 +96,11 @@ public protocol SandboxServiceClientProtocol: GRPCClient {
     _ request: SandboxPayInRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<SandboxPayInRequest, SandboxPayInResponse>
+
+  func getSandboxWithdrawLimits(
+    _ request: WithdrawLimitsRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<WithdrawLimitsRequest, WithdrawLimitsResponse>
 }
 
 extension SandboxServiceClientProtocol {
@@ -162,6 +177,24 @@ extension SandboxServiceClientProtocol {
       request: request,
       callOptions: callOptions ?? self.defaultCallOptions,
       interceptors: self.interceptors?.makePostSandboxOrderInterceptors() ?? []
+    )
+  }
+
+  ///Метод изменения выставленной заявки.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ReplaceSandboxOrder.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func replaceSandboxOrder(
+    _ request: ReplaceOrderRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<ReplaceOrderRequest, PostOrderResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.SandboxService/ReplaceSandboxOrder",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeReplaceSandboxOrderInterceptors() ?? []
     )
   }
 
@@ -255,6 +288,24 @@ extension SandboxServiceClientProtocol {
     )
   }
 
+  ///Метод получения операций в песочнице по номеру счета с пагинацией.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetSandboxOperationsByCursor.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getSandboxOperationsByCursor(
+    _ request: GetOperationsByCursorRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetOperationsByCursorRequest, GetOperationsByCursorResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.SandboxService/GetSandboxOperationsByCursor",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetSandboxOperationsByCursorInterceptors() ?? []
+    )
+  }
+
   ///Метод получения портфолио в песочнице.
   ///
   /// - Parameters:
@@ -290,6 +341,24 @@ extension SandboxServiceClientProtocol {
       interceptors: self.interceptors?.makeSandboxPayInInterceptors() ?? []
     )
   }
+
+  ///Метод получения доступного остатка для вывода средств в песочнице.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetSandboxWithdrawLimits.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getSandboxWithdrawLimits(
+    _ request: WithdrawLimitsRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<WithdrawLimitsRequest, WithdrawLimitsResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.SandboxService/GetSandboxWithdrawLimits",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetSandboxWithdrawLimitsInterceptors() ?? []
+    )
+  }
 }
 
 public protocol SandboxServiceClientInterceptorFactoryProtocol {
@@ -306,6 +375,9 @@ public protocol SandboxServiceClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'postSandboxOrder'.
   func makePostSandboxOrderInterceptors() -> [ClientInterceptor<PostOrderRequest, PostOrderResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'replaceSandboxOrder'.
+  func makeReplaceSandboxOrderInterceptors() -> [ClientInterceptor<ReplaceOrderRequest, PostOrderResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getSandboxOrders'.
   func makeGetSandboxOrdersInterceptors() -> [ClientInterceptor<GetOrdersRequest, GetOrdersResponse>]
 
@@ -321,11 +393,17 @@ public protocol SandboxServiceClientInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when invoking 'getSandboxOperations'.
   func makeGetSandboxOperationsInterceptors() -> [ClientInterceptor<OperationsRequest, OperationsResponse>]
 
+  /// - Returns: Interceptors to use when invoking 'getSandboxOperationsByCursor'.
+  func makeGetSandboxOperationsByCursorInterceptors() -> [ClientInterceptor<GetOperationsByCursorRequest, GetOperationsByCursorResponse>]
+
   /// - Returns: Interceptors to use when invoking 'getSandboxPortfolio'.
   func makeGetSandboxPortfolioInterceptors() -> [ClientInterceptor<PortfolioRequest, PortfolioResponse>]
 
   /// - Returns: Interceptors to use when invoking 'sandboxPayIn'.
   func makeSandboxPayInInterceptors() -> [ClientInterceptor<SandboxPayInRequest, SandboxPayInResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getSandboxWithdrawLimits'.
+  func makeGetSandboxWithdrawLimitsInterceptors() -> [ClientInterceptor<WithdrawLimitsRequest, WithdrawLimitsResponse>]
 }
 
 public final class SandboxServiceClient: SandboxServiceClientProtocol {
@@ -368,6 +446,9 @@ public protocol SandboxServiceProvider: CallHandlerProvider {
   ///Метод выставления торгового поручения в песочнице.
   func postSandboxOrder(request: PostOrderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<PostOrderResponse>
 
+  ///Метод изменения выставленной заявки.
+  func replaceSandboxOrder(request: ReplaceOrderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<PostOrderResponse>
+
   ///Метод получения списка активных заявок по счёту в песочнице.
   func getSandboxOrders(request: GetOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetOrdersResponse>
 
@@ -383,11 +464,17 @@ public protocol SandboxServiceProvider: CallHandlerProvider {
   ///Метод получения операций в песочнице по номеру счёта.
   func getSandboxOperations(request: OperationsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<OperationsResponse>
 
+  ///Метод получения операций в песочнице по номеру счета с пагинацией.
+  func getSandboxOperationsByCursor(request: GetOperationsByCursorRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetOperationsByCursorResponse>
+
   ///Метод получения портфолио в песочнице.
   func getSandboxPortfolio(request: PortfolioRequest, context: StatusOnlyCallContext) -> EventLoopFuture<PortfolioResponse>
 
   ///Метод пополнения счёта в песочнице.
   func sandboxPayIn(request: SandboxPayInRequest, context: StatusOnlyCallContext) -> EventLoopFuture<SandboxPayInResponse>
+
+  ///Метод получения доступного остатка для вывода средств в песочнице.
+  func getSandboxWithdrawLimits(request: WithdrawLimitsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<WithdrawLimitsResponse>
 }
 
 extension SandboxServiceProvider {
@@ -436,6 +523,15 @@ extension SandboxServiceProvider {
         userFunction: self.postSandboxOrder(request:context:)
       )
 
+    case "ReplaceSandboxOrder":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<ReplaceOrderRequest>(),
+        responseSerializer: ProtobufSerializer<PostOrderResponse>(),
+        interceptors: self.interceptors?.makeReplaceSandboxOrderInterceptors() ?? [],
+        userFunction: self.replaceSandboxOrder(request:context:)
+      )
+
     case "GetSandboxOrders":
       return UnaryServerHandler(
         context: context,
@@ -481,6 +577,15 @@ extension SandboxServiceProvider {
         userFunction: self.getSandboxOperations(request:context:)
       )
 
+    case "GetSandboxOperationsByCursor":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetOperationsByCursorRequest>(),
+        responseSerializer: ProtobufSerializer<GetOperationsByCursorResponse>(),
+        interceptors: self.interceptors?.makeGetSandboxOperationsByCursorInterceptors() ?? [],
+        userFunction: self.getSandboxOperationsByCursor(request:context:)
+      )
+
     case "GetSandboxPortfolio":
       return UnaryServerHandler(
         context: context,
@@ -497,6 +602,15 @@ extension SandboxServiceProvider {
         responseSerializer: ProtobufSerializer<SandboxPayInResponse>(),
         interceptors: self.interceptors?.makeSandboxPayInInterceptors() ?? [],
         userFunction: self.sandboxPayIn(request:context:)
+      )
+
+    case "GetSandboxWithdrawLimits":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<WithdrawLimitsRequest>(),
+        responseSerializer: ProtobufSerializer<WithdrawLimitsResponse>(),
+        interceptors: self.interceptors?.makeGetSandboxWithdrawLimitsInterceptors() ?? [],
+        userFunction: self.getSandboxWithdrawLimits(request:context:)
       )
 
     default:
@@ -523,6 +637,10 @@ public protocol SandboxServiceServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makePostSandboxOrderInterceptors() -> [ServerInterceptor<PostOrderRequest, PostOrderResponse>]
 
+  /// - Returns: Interceptors to use when handling 'replaceSandboxOrder'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeReplaceSandboxOrderInterceptors() -> [ServerInterceptor<ReplaceOrderRequest, PostOrderResponse>]
+
   /// - Returns: Interceptors to use when handling 'getSandboxOrders'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetSandboxOrdersInterceptors() -> [ServerInterceptor<GetOrdersRequest, GetOrdersResponse>]
@@ -543,6 +661,10 @@ public protocol SandboxServiceServerInterceptorFactoryProtocol {
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetSandboxOperationsInterceptors() -> [ServerInterceptor<OperationsRequest, OperationsResponse>]
 
+  /// - Returns: Interceptors to use when handling 'getSandboxOperationsByCursor'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetSandboxOperationsByCursorInterceptors() -> [ServerInterceptor<GetOperationsByCursorRequest, GetOperationsByCursorResponse>]
+
   /// - Returns: Interceptors to use when handling 'getSandboxPortfolio'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetSandboxPortfolioInterceptors() -> [ServerInterceptor<PortfolioRequest, PortfolioResponse>]
@@ -550,4 +672,8 @@ public protocol SandboxServiceServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'sandboxPayIn'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeSandboxPayInInterceptors() -> [ServerInterceptor<SandboxPayInRequest, SandboxPayInResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getSandboxWithdrawLimits'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetSandboxWithdrawLimitsInterceptors() -> [ServerInterceptor<WithdrawLimitsRequest, WithdrawLimitsResponse>]
 }

@@ -120,6 +120,11 @@ public protocol OrdersServiceClientProtocol: GRPCClient {
     _ request: GetOrdersRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<GetOrdersRequest, GetOrdersResponse>
+
+  func replaceOrder(
+    _ request: ReplaceOrderRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<ReplaceOrderRequest, PostOrderResponse>
 }
 
 extension OrdersServiceClientProtocol {
@@ -198,6 +203,24 @@ extension OrdersServiceClientProtocol {
       interceptors: self.interceptors?.makeGetOrdersInterceptors() ?? []
     )
   }
+
+  ///Метод изменения выставленной заявки.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to ReplaceOrder.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func replaceOrder(
+    _ request: ReplaceOrderRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<ReplaceOrderRequest, PostOrderResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.OrdersService/ReplaceOrder",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeReplaceOrderInterceptors() ?? []
+    )
+  }
 }
 
 public protocol OrdersServiceClientInterceptorFactoryProtocol {
@@ -213,6 +236,9 @@ public protocol OrdersServiceClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'getOrders'.
   func makeGetOrdersInterceptors() -> [ClientInterceptor<GetOrdersRequest, GetOrdersResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'replaceOrder'.
+  func makeReplaceOrderInterceptors() -> [ClientInterceptor<ReplaceOrderRequest, PostOrderResponse>]
 }
 
 public final class OrdersServiceClient: OrdersServiceClientProtocol {
@@ -295,6 +321,9 @@ public protocol OrdersServiceProvider: CallHandlerProvider {
 
   ///Метод получения списка активных заявок по счёту.
   func getOrders(request: GetOrdersRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetOrdersResponse>
+
+  ///Метод изменения выставленной заявки.
+  func replaceOrder(request: ReplaceOrderRequest, context: StatusOnlyCallContext) -> EventLoopFuture<PostOrderResponse>
 }
 
 extension OrdersServiceProvider {
@@ -343,6 +372,15 @@ extension OrdersServiceProvider {
         userFunction: self.getOrders(request:context:)
       )
 
+    case "ReplaceOrder":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<ReplaceOrderRequest>(),
+        responseSerializer: ProtobufSerializer<PostOrderResponse>(),
+        interceptors: self.interceptors?.makeReplaceOrderInterceptors() ?? [],
+        userFunction: self.replaceOrder(request:context:)
+      )
+
     default:
       return nil
     }
@@ -366,4 +404,8 @@ public protocol OrdersServiceServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'getOrders'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetOrdersInterceptors() -> [ServerInterceptor<GetOrdersRequest, GetOrdersResponse>]
+
+  /// - Returns: Interceptors to use when handling 'replaceOrder'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeReplaceOrderInterceptors() -> [ServerInterceptor<ReplaceOrderRequest, PostOrderResponse>]
 }

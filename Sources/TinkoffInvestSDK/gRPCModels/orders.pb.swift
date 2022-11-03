@@ -20,7 +20,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-///Направление операции
+///Направление операции.
 public enum OrderDirection: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -71,7 +71,7 @@ extension OrderDirection: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-///Тип заявки
+///Тип заявки.
 public enum OrderType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -189,11 +189,65 @@ extension OrderExecutionReportStatus: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+///Тип цены.
+public enum PriceType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+
+  ///Значение не определено.
+  case unspecified // = 0
+
+  ///Цена в пунктах (только для фьючерсов и облигаций).
+  case point // = 1
+
+  ///Цена в валюте расчётов по инструменту.
+  case currency // = 2
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .unspecified
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .unspecified
+    case 1: self = .point
+    case 2: self = .currency
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .unspecified: return 0
+    case .point: return 1
+    case .currency: return 2
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension PriceType: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [PriceType] = [
+    .unspecified,
+    .point,
+    .currency,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 ///Запрос установки соединения.
 public struct TradesStreamRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
+
+  ///Идентификаторы счетов.
+  public var accounts: [String] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -263,10 +317,10 @@ public struct OrderTrades {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Идентификатор торгового поручения
+  ///Идентификатор торгового поручения.
   public var orderID: String = String()
 
-  ///Дата и время создания сообщения
+  ///Дата и время создания сообщения в часовом поясе UTC.
   public var createdAt: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _createdAt ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_createdAt = newValue}
@@ -276,14 +330,20 @@ public struct OrderTrades {
   /// Clears the value of `createdAt`. Subsequent reads from it will return its default value.
   public mutating func clearCreatedAt() {self._createdAt = nil}
 
-  ///Направление сделки (возможные значения)
+  ///Направление сделки.
   public var direction: OrderDirection = .unspecified
 
-  ///Figi-идентификатор инструмента
+  ///Figi-идентификатор инструмента.
   public var figi: String = String()
 
-  ///Массив сделок
+  ///Массив сделок.
   public var trades: [OrderTrade] = []
+
+  ///Идентификатор счёта.
+  public var accountID: String = String()
+
+  ///UID идентификатор инструмента.
+  public var instrumentUid: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -298,7 +358,7 @@ public struct OrderTrade {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Дата и время совершения сделки по времени биржи
+  ///Дата и время совершения сделки в часовом поясе UTC.
   public var dateTime: SwiftProtobuf.Google_Protobuf_Timestamp {
     get {return _dateTime ?? SwiftProtobuf.Google_Protobuf_Timestamp()}
     set {_dateTime = newValue}
@@ -308,7 +368,7 @@ public struct OrderTrade {
   /// Clears the value of `dateTime`. Subsequent reads from it will return its default value.
   public mutating func clearDateTime() {self._dateTime = nil}
 
-  ///Цена, по которой совершена сделка
+  ///Цена одного инструмента, по которой совершена сделка.
   public var price: Quotation {
     get {return _price ?? Quotation()}
     set {_price = newValue}
@@ -318,7 +378,7 @@ public struct OrderTrade {
   /// Clears the value of `price`. Subsequent reads from it will return its default value.
   public mutating func clearPrice() {self._price = nil}
 
-  ///Количество лотов в сделке
+  ///Количество лотов в сделке.
   public var quantity: Int64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -341,7 +401,7 @@ public struct PostOrderRequest {
   ///Количество лотов.
   public var quantity: Int64 = 0
 
-  ///Цена лота.
+  ///Цена одного инструмента. Для получения стоимости лота требуется умножить на лотность инструмента. Игнорируется для рыночных поручений.
   public var price: Quotation {
     get {return _price ?? Quotation()}
     set {_price = newValue}
@@ -362,6 +422,9 @@ public struct PostOrderRequest {
 
   ///Идентификатор запроса выставления поручения для целей идемпотентности. Максимальная длина 36 символов.
   public var orderID: String = String()
+
+  ///Идентификатор инструмента, принимает значения Figi или Instrument_uid.
+  public var instrumentID: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -472,7 +535,7 @@ public struct PostOrderResponse {
     set {_uniqueStorage()._direction = newValue}
   }
 
-  ///Начальная цена инструмента заявки.
+  ///Начальная цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
   public var initialSecurityPrice: MoneyValue {
     get {return _storage._initialSecurityPrice ?? MoneyValue()}
     set {_uniqueStorage()._initialSecurityPrice = newValue}
@@ -503,6 +566,12 @@ public struct PostOrderResponse {
   public var hasInitialOrderPricePt: Bool {return _storage._initialOrderPricePt != nil}
   /// Clears the value of `initialOrderPricePt`. Subsequent reads from it will return its default value.
   public mutating func clearInitialOrderPricePt() {_uniqueStorage()._initialOrderPricePt = nil}
+
+  ///UID идентификатор инструмента.
+  public var instrumentUid: String {
+    get {return _storage._instrumentUid}
+    set {_uniqueStorage()._instrumentUid = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -698,7 +767,7 @@ public struct OrderState {
     set {_uniqueStorage()._direction = newValue}
   }
 
-  ///Начальная цена инструмента. Цена инструмента на момент выставления заявки.
+  ///Начальная цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
   public var initialSecurityPrice: MoneyValue {
     get {return _storage._initialSecurityPrice ?? MoneyValue()}
     set {_uniqueStorage()._initialSecurityPrice = newValue}
@@ -746,6 +815,12 @@ public struct OrderState {
   /// Clears the value of `orderDate`. Subsequent reads from it will return its default value.
   public mutating func clearOrderDate() {_uniqueStorage()._orderDate = nil}
 
+  ///UID идентификатор инструмента.
+  public var instrumentUid: String {
+    get {return _storage._instrumentUid}
+    set {_uniqueStorage()._instrumentUid = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -759,7 +834,7 @@ public struct OrderStage {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  ///Цена.
+  ///Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
   public var price: MoneyValue {
     get {return _price ?? MoneyValue()}
     set {_price = newValue}
@@ -780,6 +855,44 @@ public struct OrderStage {
   public init() {}
 
   fileprivate var _price: MoneyValue? = nil
+}
+
+///Запрос изменения выставленной заявки.
+public struct ReplaceOrderRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  ///Номер счета.
+  public var accountID: String = String()
+
+  ///Идентификатор заявки на бирже.
+  public var orderID: String = String()
+
+  ///Новый идентификатор запроса выставления поручения для целей идемпотентности. Максимальная длина 36 символов. Перезатирает старый ключ.
+  public var idempotencyKey: String = String()
+
+  ///Количество лотов.
+  public var quantity: Int64 = 0
+
+  ///Цена за 1 инструмент.
+  public var price: Quotation {
+    get {return _price ?? Quotation()}
+    set {_price = newValue}
+  }
+  /// Returns true if `price` has been explicitly set.
+  public var hasPrice: Bool {return self._price != nil}
+  /// Clears the value of `price`. Subsequent reads from it will return its default value.
+  public mutating func clearPrice() {self._price = nil}
+
+  ///Тип цены.
+  public var priceType: PriceType = .unspecified
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _price: Quotation? = nil
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -813,20 +926,41 @@ extension OrderExecutionReportStatus: SwiftProtobuf._ProtoNameProviding {
   ]
 }
 
+extension PriceType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "PRICE_TYPE_UNSPECIFIED"),
+    1: .same(proto: "PRICE_TYPE_POINT"),
+    2: .same(proto: "PRICE_TYPE_CURRENCY"),
+  ]
+}
+
 extension TradesStreamRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TradesStreamRequest"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "accounts"),
+  ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let _ = try decoder.nextFieldNumber() {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedStringField(value: &self.accounts) }()
+      default: break
+      }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.accounts.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.accounts, fieldNumber: 1)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: TradesStreamRequest, rhs: TradesStreamRequest) -> Bool {
+    if lhs.accounts != rhs.accounts {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -910,6 +1044,8 @@ extension OrderTrades: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
     3: .same(proto: "direction"),
     4: .same(proto: "figi"),
     5: .same(proto: "trades"),
+    6: .standard(proto: "account_id"),
+    7: .standard(proto: "instrument_uid"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -923,6 +1059,8 @@ extension OrderTrades: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
       case 3: try { try decoder.decodeSingularEnumField(value: &self.direction) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.figi) }()
       case 5: try { try decoder.decodeRepeatedMessageField(value: &self.trades) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.accountID) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.instrumentUid) }()
       default: break
       }
     }
@@ -948,6 +1086,12 @@ extension OrderTrades: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
     if !self.trades.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.trades, fieldNumber: 5)
     }
+    if !self.accountID.isEmpty {
+      try visitor.visitSingularStringField(value: self.accountID, fieldNumber: 6)
+    }
+    if !self.instrumentUid.isEmpty {
+      try visitor.visitSingularStringField(value: self.instrumentUid, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -957,6 +1101,8 @@ extension OrderTrades: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
     if lhs.direction != rhs.direction {return false}
     if lhs.figi != rhs.figi {return false}
     if lhs.trades != rhs.trades {return false}
+    if lhs.accountID != rhs.accountID {return false}
+    if lhs.instrumentUid != rhs.instrumentUid {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1020,6 +1166,7 @@ extension PostOrderRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     5: .standard(proto: "account_id"),
     6: .standard(proto: "order_type"),
     7: .standard(proto: "order_id"),
+    8: .standard(proto: "instrument_id"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1035,6 +1182,7 @@ extension PostOrderRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 5: try { try decoder.decodeSingularStringField(value: &self.accountID) }()
       case 6: try { try decoder.decodeSingularEnumField(value: &self.orderType) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self.orderID) }()
+      case 8: try { try decoder.decodeSingularStringField(value: &self.instrumentID) }()
       default: break
       }
     }
@@ -1066,6 +1214,9 @@ extension PostOrderRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if !self.orderID.isEmpty {
       try visitor.visitSingularStringField(value: self.orderID, fieldNumber: 7)
     }
+    if !self.instrumentID.isEmpty {
+      try visitor.visitSingularStringField(value: self.instrumentID, fieldNumber: 8)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1077,6 +1228,7 @@ extension PostOrderRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs.accountID != rhs.accountID {return false}
     if lhs.orderType != rhs.orderType {return false}
     if lhs.orderID != rhs.orderID {return false}
+    if lhs.instrumentID != rhs.instrumentID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1101,6 +1253,7 @@ extension PostOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     14: .standard(proto: "order_type"),
     15: .same(proto: "message"),
     16: .standard(proto: "initial_order_price_pt"),
+    17: .standard(proto: "instrument_uid"),
   ]
 
   fileprivate class _StorageClass {
@@ -1120,6 +1273,7 @@ extension PostOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _orderType: OrderType = .unspecified
     var _message: String = String()
     var _initialOrderPricePt: Quotation? = nil
+    var _instrumentUid: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -1142,6 +1296,7 @@ extension PostOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       _orderType = source._orderType
       _message = source._message
       _initialOrderPricePt = source._initialOrderPricePt
+      _instrumentUid = source._instrumentUid
     }
   }
 
@@ -1176,6 +1331,7 @@ extension PostOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         case 14: try { try decoder.decodeSingularEnumField(value: &_storage._orderType) }()
         case 15: try { try decoder.decodeSingularStringField(value: &_storage._message) }()
         case 16: try { try decoder.decodeSingularMessageField(value: &_storage._initialOrderPricePt) }()
+        case 17: try { try decoder.decodeSingularStringField(value: &_storage._instrumentUid) }()
         default: break
         }
       }
@@ -1236,6 +1392,9 @@ extension PostOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
       try { if let v = _storage._initialOrderPricePt {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 16)
       } }()
+      if !_storage._instrumentUid.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._instrumentUid, fieldNumber: 17)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1261,6 +1420,7 @@ extension PostOrderResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
         if _storage._orderType != rhs_storage._orderType {return false}
         if _storage._message != rhs_storage._message {return false}
         if _storage._initialOrderPricePt != rhs_storage._initialOrderPricePt {return false}
+        if _storage._instrumentUid != rhs_storage._instrumentUid {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -1467,6 +1627,7 @@ extension OrderState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     16: .same(proto: "currency"),
     17: .standard(proto: "order_type"),
     18: .standard(proto: "order_date"),
+    19: .standard(proto: "instrument_uid"),
   ]
 
   fileprivate class _StorageClass {
@@ -1488,6 +1649,7 @@ extension OrderState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     var _currency: String = String()
     var _orderType: OrderType = .unspecified
     var _orderDate: SwiftProtobuf.Google_Protobuf_Timestamp? = nil
+    var _instrumentUid: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -1512,6 +1674,7 @@ extension OrderState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       _currency = source._currency
       _orderType = source._orderType
       _orderDate = source._orderDate
+      _instrumentUid = source._instrumentUid
     }
   }
 
@@ -1548,6 +1711,7 @@ extension OrderState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
         case 16: try { try decoder.decodeSingularStringField(value: &_storage._currency) }()
         case 17: try { try decoder.decodeSingularEnumField(value: &_storage._orderType) }()
         case 18: try { try decoder.decodeSingularMessageField(value: &_storage._orderDate) }()
+        case 19: try { try decoder.decodeSingularStringField(value: &_storage._instrumentUid) }()
         default: break
         }
       }
@@ -1614,6 +1778,9 @@ extension OrderState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       try { if let v = _storage._orderDate {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
       } }()
+      if !_storage._instrumentUid.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._instrumentUid, fieldNumber: 19)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1641,6 +1808,7 @@ extension OrderState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
         if _storage._currency != rhs_storage._currency {return false}
         if _storage._orderType != rhs_storage._orderType {return false}
         if _storage._orderDate != rhs_storage._orderDate {return false}
+        if _storage._instrumentUid != rhs_storage._instrumentUid {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -1693,6 +1861,72 @@ extension OrderStage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     if lhs._price != rhs._price {return false}
     if lhs.quantity != rhs.quantity {return false}
     if lhs.tradeID != rhs.tradeID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension ReplaceOrderRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ReplaceOrderRequest"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "account_id"),
+    6: .standard(proto: "order_id"),
+    7: .standard(proto: "idempotency_key"),
+    11: .same(proto: "quantity"),
+    12: .same(proto: "price"),
+    13: .standard(proto: "price_type"),
+  ]
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.accountID) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self.orderID) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.idempotencyKey) }()
+      case 11: try { try decoder.decodeSingularInt64Field(value: &self.quantity) }()
+      case 12: try { try decoder.decodeSingularMessageField(value: &self._price) }()
+      case 13: try { try decoder.decodeSingularEnumField(value: &self.priceType) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.accountID.isEmpty {
+      try visitor.visitSingularStringField(value: self.accountID, fieldNumber: 1)
+    }
+    if !self.orderID.isEmpty {
+      try visitor.visitSingularStringField(value: self.orderID, fieldNumber: 6)
+    }
+    if !self.idempotencyKey.isEmpty {
+      try visitor.visitSingularStringField(value: self.idempotencyKey, fieldNumber: 7)
+    }
+    if self.quantity != 0 {
+      try visitor.visitSingularInt64Field(value: self.quantity, fieldNumber: 11)
+    }
+    try { if let v = self._price {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+    } }()
+    if self.priceType != .unspecified {
+      try visitor.visitSingularEnumField(value: self.priceType, fieldNumber: 13)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: ReplaceOrderRequest, rhs: ReplaceOrderRequest) -> Bool {
+    if lhs.accountID != rhs.accountID {return false}
+    if lhs.orderID != rhs.orderID {return false}
+    if lhs.idempotencyKey != rhs.idempotencyKey {return false}
+    if lhs.quantity != rhs.quantity {return false}
+    if lhs._price != rhs._price {return false}
+    if lhs.priceType != rhs.priceType {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

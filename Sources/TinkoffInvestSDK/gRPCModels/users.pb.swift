@@ -134,6 +134,63 @@ extension AccountStatus: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+///Уровень доступа к счёту.
+public enum AccessLevel: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+
+  ///Уровень доступа не определён.
+  case accountAccessLevelUnspecified // = 0
+
+  ///Полный доступ к счёту.
+  case accountAccessLevelFullAccess // = 1
+
+  ///Доступ с уровнем прав "только чтение".
+  case accountAccessLevelReadOnly // = 2
+
+  ///Доступ отсутствует.
+  case accountAccessLevelNoAccess // = 3
+  case UNRECOGNIZED(Int)
+
+  public init() {
+    self = .accountAccessLevelUnspecified
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .accountAccessLevelUnspecified
+    case 1: self = .accountAccessLevelFullAccess
+    case 2: self = .accountAccessLevelReadOnly
+    case 3: self = .accountAccessLevelNoAccess
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .accountAccessLevelUnspecified: return 0
+    case .accountAccessLevelFullAccess: return 1
+    case .accountAccessLevelReadOnly: return 2
+    case .accountAccessLevelNoAccess: return 3
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension AccessLevel: CaseIterable {
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  public static var allCases: [AccessLevel] = [
+    .accountAccessLevelUnspecified,
+    .accountAccessLevelFullAccess,
+    .accountAccessLevelReadOnly,
+    .accountAccessLevelNoAccess,
+  ]
+}
+
+#endif  // swift(>=4.2)
+
 ///Запрос получения счетов пользователя.
 public struct GetAccountsRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -197,6 +254,9 @@ public struct Account {
   /// Clears the value of `closedDate`. Subsequent reads from it will return its default value.
   public mutating func clearClosedDate() {self._closedDate = nil}
 
+  /// Уровень доступа к текущему счёту (определяется токеном).
+  public var accessLevel: AccessLevel = .accountAccessLevelUnspecified
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -227,63 +287,69 @@ public struct GetMarginAttributesResponse {
 
   /// Ликвидная стоимость портфеля. Подробнее: [что такое ликвидный портфель?](https://help.tinkoff.ru/margin-trade/short/liquid-portfolio/).
   public var liquidPortfolio: MoneyValue {
-    get {return _liquidPortfolio ?? MoneyValue()}
-    set {_liquidPortfolio = newValue}
+    get {return _storage._liquidPortfolio ?? MoneyValue()}
+    set {_uniqueStorage()._liquidPortfolio = newValue}
   }
   /// Returns true if `liquidPortfolio` has been explicitly set.
-  public var hasLiquidPortfolio: Bool {return self._liquidPortfolio != nil}
+  public var hasLiquidPortfolio: Bool {return _storage._liquidPortfolio != nil}
   /// Clears the value of `liquidPortfolio`. Subsequent reads from it will return its default value.
-  public mutating func clearLiquidPortfolio() {self._liquidPortfolio = nil}
+  public mutating func clearLiquidPortfolio() {_uniqueStorage()._liquidPortfolio = nil}
 
   /// Начальная маржа — начальное обеспечение для совершения новой сделки. Подробнее: [начальная и минимальная маржа](https://help.tinkoff.ru/margin-trade/short/initial-and-maintenance-margin/).
   public var startingMargin: MoneyValue {
-    get {return _startingMargin ?? MoneyValue()}
-    set {_startingMargin = newValue}
+    get {return _storage._startingMargin ?? MoneyValue()}
+    set {_uniqueStorage()._startingMargin = newValue}
   }
   /// Returns true if `startingMargin` has been explicitly set.
-  public var hasStartingMargin: Bool {return self._startingMargin != nil}
+  public var hasStartingMargin: Bool {return _storage._startingMargin != nil}
   /// Clears the value of `startingMargin`. Subsequent reads from it will return its default value.
-  public mutating func clearStartingMargin() {self._startingMargin = nil}
+  public mutating func clearStartingMargin() {_uniqueStorage()._startingMargin = nil}
 
   /// Минимальная маржа — это минимальное обеспечение для поддержания позиции, которую вы уже открыли. Подробнее: [начальная и минимальная маржа](https://help.tinkoff.ru/margin-trade/short/initial-and-maintenance-margin/).
   public var minimalMargin: MoneyValue {
-    get {return _minimalMargin ?? MoneyValue()}
-    set {_minimalMargin = newValue}
+    get {return _storage._minimalMargin ?? MoneyValue()}
+    set {_uniqueStorage()._minimalMargin = newValue}
   }
   /// Returns true if `minimalMargin` has been explicitly set.
-  public var hasMinimalMargin: Bool {return self._minimalMargin != nil}
+  public var hasMinimalMargin: Bool {return _storage._minimalMargin != nil}
   /// Clears the value of `minimalMargin`. Subsequent reads from it will return its default value.
-  public mutating func clearMinimalMargin() {self._minimalMargin = nil}
+  public mutating func clearMinimalMargin() {_uniqueStorage()._minimalMargin = nil}
 
   /// Уровень достаточности средств. Соотношение стоимости ликвидного портфеля к начальной марже.
   public var fundsSufficiencyLevel: Quotation {
-    get {return _fundsSufficiencyLevel ?? Quotation()}
-    set {_fundsSufficiencyLevel = newValue}
+    get {return _storage._fundsSufficiencyLevel ?? Quotation()}
+    set {_uniqueStorage()._fundsSufficiencyLevel = newValue}
   }
   /// Returns true if `fundsSufficiencyLevel` has been explicitly set.
-  public var hasFundsSufficiencyLevel: Bool {return self._fundsSufficiencyLevel != nil}
+  public var hasFundsSufficiencyLevel: Bool {return _storage._fundsSufficiencyLevel != nil}
   /// Clears the value of `fundsSufficiencyLevel`. Subsequent reads from it will return its default value.
-  public mutating func clearFundsSufficiencyLevel() {self._fundsSufficiencyLevel = nil}
+  public mutating func clearFundsSufficiencyLevel() {_uniqueStorage()._fundsSufficiencyLevel = nil}
 
   /// Объем недостающих средств. Разница между стартовой маржой и ликвидной стоимости портфеля.
   public var amountOfMissingFunds: MoneyValue {
-    get {return _amountOfMissingFunds ?? MoneyValue()}
-    set {_amountOfMissingFunds = newValue}
+    get {return _storage._amountOfMissingFunds ?? MoneyValue()}
+    set {_uniqueStorage()._amountOfMissingFunds = newValue}
   }
   /// Returns true if `amountOfMissingFunds` has been explicitly set.
-  public var hasAmountOfMissingFunds: Bool {return self._amountOfMissingFunds != nil}
+  public var hasAmountOfMissingFunds: Bool {return _storage._amountOfMissingFunds != nil}
   /// Clears the value of `amountOfMissingFunds`. Subsequent reads from it will return its default value.
-  public mutating func clearAmountOfMissingFunds() {self._amountOfMissingFunds = nil}
+  public mutating func clearAmountOfMissingFunds() {_uniqueStorage()._amountOfMissingFunds = nil}
+
+  /// Скорректированная маржа.Начальная маржа, в которой плановые позиции рассчитываются с учётом активных заявок на покупку позиций лонг или продажу позиций шорт.
+  public var correctedMargin: MoneyValue {
+    get {return _storage._correctedMargin ?? MoneyValue()}
+    set {_uniqueStorage()._correctedMargin = newValue}
+  }
+  /// Returns true if `correctedMargin` has been explicitly set.
+  public var hasCorrectedMargin: Bool {return _storage._correctedMargin != nil}
+  /// Clears the value of `correctedMargin`. Subsequent reads from it will return its default value.
+  public mutating func clearCorrectedMargin() {_uniqueStorage()._correctedMargin = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _liquidPortfolio: MoneyValue? = nil
-  fileprivate var _startingMargin: MoneyValue? = nil
-  fileprivate var _minimalMargin: MoneyValue? = nil
-  fileprivate var _fundsSufficiencyLevel: Quotation? = nil
-  fileprivate var _amountOfMissingFunds: MoneyValue? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 ///Запрос текущих лимитов пользователя.
@@ -371,8 +437,11 @@ public struct GetInfoResponse {
   ///Признак квалифицированного инвестора.
   public var qualStatus: Bool = false
 
-  ///Набор требующих тестирования инструментов и возможностей, с которыми может работать пользователь.
+  ///Набор требующих тестирования инструментов и возможностей, с которыми может работать пользователь. [Подробнее](https://tinkoff.github.io/investAPI/faq_users/).
   public var qualifiedForWorkWith: [String] = []
+
+  ///Наименование тарифа пользователя.
+  public var tariff: String = String()
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -398,6 +467,15 @@ extension AccountStatus: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "ACCOUNT_STATUS_NEW"),
     2: .same(proto: "ACCOUNT_STATUS_OPEN"),
     3: .same(proto: "ACCOUNT_STATUS_CLOSED"),
+  ]
+}
+
+extension AccessLevel: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "ACCOUNT_ACCESS_LEVEL_UNSPECIFIED"),
+    1: .same(proto: "ACCOUNT_ACCESS_LEVEL_FULL_ACCESS"),
+    2: .same(proto: "ACCOUNT_ACCESS_LEVEL_READ_ONLY"),
+    3: .same(proto: "ACCOUNT_ACCESS_LEVEL_NO_ACCESS"),
   ]
 }
 
@@ -461,6 +539,7 @@ extension Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     4: .same(proto: "status"),
     5: .standard(proto: "opened_date"),
     6: .standard(proto: "closed_date"),
+    7: .standard(proto: "access_level"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -475,6 +554,7 @@ extension Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       case 4: try { try decoder.decodeSingularEnumField(value: &self.status) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._openedDate) }()
       case 6: try { try decoder.decodeSingularMessageField(value: &self._closedDate) }()
+      case 7: try { try decoder.decodeSingularEnumField(value: &self.accessLevel) }()
       default: break
       }
     }
@@ -503,6 +583,9 @@ extension Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     try { if let v = self._closedDate {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     } }()
+    if self.accessLevel != .accountAccessLevelUnspecified {
+      try visitor.visitSingularEnumField(value: self.accessLevel, fieldNumber: 7)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -513,6 +596,7 @@ extension Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     if lhs.status != rhs.status {return false}
     if lhs._openedDate != rhs._openedDate {return false}
     if lhs._closedDate != rhs._closedDate {return false}
+    if lhs.accessLevel != rhs.accessLevel {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -558,53 +642,101 @@ extension GetMarginAttributesResponse: SwiftProtobuf.Message, SwiftProtobuf._Mes
     3: .standard(proto: "minimal_margin"),
     4: .standard(proto: "funds_sufficiency_level"),
     5: .standard(proto: "amount_of_missing_funds"),
+    6: .standard(proto: "corrected_margin"),
   ]
 
+  fileprivate class _StorageClass {
+    var _liquidPortfolio: MoneyValue? = nil
+    var _startingMargin: MoneyValue? = nil
+    var _minimalMargin: MoneyValue? = nil
+    var _fundsSufficiencyLevel: Quotation? = nil
+    var _amountOfMissingFunds: MoneyValue? = nil
+    var _correctedMargin: MoneyValue? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _liquidPortfolio = source._liquidPortfolio
+      _startingMargin = source._startingMargin
+      _minimalMargin = source._minimalMargin
+      _fundsSufficiencyLevel = source._fundsSufficiencyLevel
+      _amountOfMissingFunds = source._amountOfMissingFunds
+      _correctedMargin = source._correctedMargin
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._liquidPortfolio) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._startingMargin) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._minimalMargin) }()
-      case 4: try { try decoder.decodeSingularMessageField(value: &self._fundsSufficiencyLevel) }()
-      case 5: try { try decoder.decodeSingularMessageField(value: &self._amountOfMissingFunds) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._liquidPortfolio) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._startingMargin) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._minimalMargin) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._fundsSufficiencyLevel) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._amountOfMissingFunds) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._correctedMargin) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._liquidPortfolio {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._startingMargin {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try { if let v = self._minimalMargin {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
-    try { if let v = self._fundsSufficiencyLevel {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    } }()
-    try { if let v = self._amountOfMissingFunds {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    } }()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._liquidPortfolio {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      try { if let v = _storage._startingMargin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+      } }()
+      try { if let v = _storage._minimalMargin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._fundsSufficiencyLevel {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._amountOfMissingFunds {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._correctedMargin {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: GetMarginAttributesResponse, rhs: GetMarginAttributesResponse) -> Bool {
-    if lhs._liquidPortfolio != rhs._liquidPortfolio {return false}
-    if lhs._startingMargin != rhs._startingMargin {return false}
-    if lhs._minimalMargin != rhs._minimalMargin {return false}
-    if lhs._fundsSufficiencyLevel != rhs._fundsSufficiencyLevel {return false}
-    if lhs._amountOfMissingFunds != rhs._amountOfMissingFunds {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._liquidPortfolio != rhs_storage._liquidPortfolio {return false}
+        if _storage._startingMargin != rhs_storage._startingMargin {return false}
+        if _storage._minimalMargin != rhs_storage._minimalMargin {return false}
+        if _storage._fundsSufficiencyLevel != rhs_storage._fundsSufficiencyLevel {return false}
+        if _storage._amountOfMissingFunds != rhs_storage._amountOfMissingFunds {return false}
+        if _storage._correctedMargin != rhs_storage._correctedMargin {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -768,6 +900,7 @@ extension GetInfoResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     1: .standard(proto: "prem_status"),
     2: .standard(proto: "qual_status"),
     3: .standard(proto: "qualified_for_work_with"),
+    4: .same(proto: "tariff"),
   ]
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -779,6 +912,7 @@ extension GetInfoResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       case 1: try { try decoder.decodeSingularBoolField(value: &self.premStatus) }()
       case 2: try { try decoder.decodeSingularBoolField(value: &self.qualStatus) }()
       case 3: try { try decoder.decodeRepeatedStringField(value: &self.qualifiedForWorkWith) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.tariff) }()
       default: break
       }
     }
@@ -794,6 +928,9 @@ extension GetInfoResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if !self.qualifiedForWorkWith.isEmpty {
       try visitor.visitRepeatedStringField(value: self.qualifiedForWorkWith, fieldNumber: 3)
     }
+    if !self.tariff.isEmpty {
+      try visitor.visitSingularStringField(value: self.tariff, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -801,6 +938,7 @@ extension GetInfoResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if lhs.premStatus != rhs.premStatus {return false}
     if lhs.qualStatus != rhs.qualStatus {return false}
     if lhs.qualifiedForWorkWith != rhs.qualifiedForWorkWith {return false}
+    if lhs.tariff != rhs.tariff {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

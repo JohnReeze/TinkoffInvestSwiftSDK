@@ -27,7 +27,7 @@ import SwiftProtobuf
 
 ///Сервис предназначен для получения:</br> **1**.  списка операций по счёту;</br> **2**.
 ///портфеля по счёту;</br> **3**. позиций ценных бумаг на счёте;</br> **4**.
-///доступного остатка для вывода средств.
+///доступного остатка для вывода средств;</br> **5**. получения различных отчётов.
 ///
 /// Usage: instantiate `OperationsServiceClient`, then call methods of this protocol to make API calls.
 public protocol OperationsServiceClientProtocol: GRPCClient {
@@ -53,6 +53,21 @@ public protocol OperationsServiceClientProtocol: GRPCClient {
     _ request: WithdrawLimitsRequest,
     callOptions: CallOptions?
   ) -> UnaryCall<WithdrawLimitsRequest, WithdrawLimitsResponse>
+
+  func getBrokerReport(
+    _ request: BrokerReportRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<BrokerReportRequest, BrokerReportResponse>
+
+  func getDividendsForeignIssuer(
+    _ request: GetDividendsForeignIssuerRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetDividendsForeignIssuerRequest, GetDividendsForeignIssuerResponse>
+
+  func getOperationsByCursor(
+    _ request: GetOperationsByCursorRequest,
+    callOptions: CallOptions?
+  ) -> UnaryCall<GetOperationsByCursorRequest, GetOperationsByCursorResponse>
 }
 
 extension OperationsServiceClientProtocol {
@@ -131,6 +146,60 @@ extension OperationsServiceClientProtocol {
       interceptors: self.interceptors?.makeGetWithdrawLimitsInterceptors() ?? []
     )
   }
+
+  ///Метод получения брокерского отчёта.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetBrokerReport.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getBrokerReport(
+    _ request: BrokerReportRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<BrokerReportRequest, BrokerReportResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.OperationsService/GetBrokerReport",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetBrokerReportInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения отчёта "Справка о доходах за пределами РФ".
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetDividendsForeignIssuer.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getDividendsForeignIssuer(
+    _ request: GetDividendsForeignIssuerRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetDividendsForeignIssuerRequest, GetDividendsForeignIssuerResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.OperationsService/GetDividendsForeignIssuer",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetDividendsForeignIssuerInterceptors() ?? []
+    )
+  }
+
+  ///Метод получения списка операций по счёту с пагинацией.
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to GetOperationsByCursor.
+  ///   - callOptions: Call options.
+  /// - Returns: A `UnaryCall` with futures for the metadata, status and response.
+  public func getOperationsByCursor(
+    _ request: GetOperationsByCursorRequest,
+    callOptions: CallOptions? = nil
+  ) -> UnaryCall<GetOperationsByCursorRequest, GetOperationsByCursorResponse> {
+    return self.makeUnaryCall(
+      path: "/tinkoff.public.invest.api.contract.v1.OperationsService/GetOperationsByCursor",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makeGetOperationsByCursorInterceptors() ?? []
+    )
+  }
 }
 
 public protocol OperationsServiceClientInterceptorFactoryProtocol {
@@ -146,6 +215,15 @@ public protocol OperationsServiceClientInterceptorFactoryProtocol {
 
   /// - Returns: Interceptors to use when invoking 'getWithdrawLimits'.
   func makeGetWithdrawLimitsInterceptors() -> [ClientInterceptor<WithdrawLimitsRequest, WithdrawLimitsResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getBrokerReport'.
+  func makeGetBrokerReportInterceptors() -> [ClientInterceptor<BrokerReportRequest, BrokerReportResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getDividendsForeignIssuer'.
+  func makeGetDividendsForeignIssuerInterceptors() -> [ClientInterceptor<GetDividendsForeignIssuerRequest, GetDividendsForeignIssuerResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'getOperationsByCursor'.
+  func makeGetOperationsByCursorInterceptors() -> [ClientInterceptor<GetOperationsByCursorRequest, GetOperationsByCursorResponse>]
 }
 
 public final class OperationsServiceClient: OperationsServiceClientProtocol {
@@ -170,9 +248,106 @@ public final class OperationsServiceClient: OperationsServiceClientProtocol {
   }
 }
 
+/// Usage: instantiate `OperationsStreamServiceClient`, then call methods of this protocol to make API calls.
+public protocol OperationsStreamServiceClientProtocol: GRPCClient {
+  var serviceName: String { get }
+  var interceptors: OperationsStreamServiceClientInterceptorFactoryProtocol? { get }
+
+  func portfolioStream(
+    _ request: PortfolioStreamRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (PortfolioStreamResponse) -> Void
+  ) -> ServerStreamingCall<PortfolioStreamRequest, PortfolioStreamResponse>
+
+  func positionsStream(
+    _ request: PositionsStreamRequest,
+    callOptions: CallOptions?,
+    handler: @escaping (PositionsStreamResponse) -> Void
+  ) -> ServerStreamingCall<PositionsStreamRequest, PositionsStreamResponse>
+}
+
+extension OperationsStreamServiceClientProtocol {
+  public var serviceName: String {
+    return "tinkoff.public.invest.api.contract.v1.OperationsStreamService"
+  }
+
+  ///Server-side stream обновлений портфеля
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PortfolioStream.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  public func portfolioStream(
+    _ request: PortfolioStreamRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (PortfolioStreamResponse) -> Void
+  ) -> ServerStreamingCall<PortfolioStreamRequest, PortfolioStreamResponse> {
+    return self.makeServerStreamingCall(
+      path: "/tinkoff.public.invest.api.contract.v1.OperationsStreamService/PortfolioStream",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePortfolioStreamInterceptors() ?? [],
+      handler: handler
+    )
+  }
+
+  ///Server-side stream обновлений информации по изменению позиций портфеля
+  ///
+  /// - Parameters:
+  ///   - request: Request to send to PositionsStream.
+  ///   - callOptions: Call options.
+  ///   - handler: A closure called when each response is received from the server.
+  /// - Returns: A `ServerStreamingCall` with futures for the metadata and status.
+  public func positionsStream(
+    _ request: PositionsStreamRequest,
+    callOptions: CallOptions? = nil,
+    handler: @escaping (PositionsStreamResponse) -> Void
+  ) -> ServerStreamingCall<PositionsStreamRequest, PositionsStreamResponse> {
+    return self.makeServerStreamingCall(
+      path: "/tinkoff.public.invest.api.contract.v1.OperationsStreamService/PositionsStream",
+      request: request,
+      callOptions: callOptions ?? self.defaultCallOptions,
+      interceptors: self.interceptors?.makePositionsStreamInterceptors() ?? [],
+      handler: handler
+    )
+  }
+}
+
+public protocol OperationsStreamServiceClientInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when invoking 'portfolioStream'.
+  func makePortfolioStreamInterceptors() -> [ClientInterceptor<PortfolioStreamRequest, PortfolioStreamResponse>]
+
+  /// - Returns: Interceptors to use when invoking 'positionsStream'.
+  func makePositionsStreamInterceptors() -> [ClientInterceptor<PositionsStreamRequest, PositionsStreamResponse>]
+}
+
+public final class OperationsStreamServiceClient: OperationsStreamServiceClientProtocol {
+  public let channel: GRPCChannel
+  public var defaultCallOptions: CallOptions
+  public var interceptors: OperationsStreamServiceClientInterceptorFactoryProtocol?
+
+  /// Creates a client for the tinkoff.public.invest.api.contract.v1.OperationsStreamService service.
+  ///
+  /// - Parameters:
+  ///   - channel: `GRPCChannel` to the service host.
+  ///   - defaultCallOptions: Options to use for each service call if the user doesn't provide them.
+  ///   - interceptors: A factory providing interceptors for each RPC.
+  public init(
+    channel: GRPCChannel,
+    defaultCallOptions: CallOptions = CallOptions(),
+    interceptors: OperationsStreamServiceClientInterceptorFactoryProtocol? = nil
+  ) {
+    self.channel = channel
+    self.defaultCallOptions = defaultCallOptions
+    self.interceptors = interceptors
+  }
+}
+
 ///Сервис предназначен для получения:</br> **1**.  списка операций по счёту;</br> **2**.
 ///портфеля по счёту;</br> **3**. позиций ценных бумаг на счёте;</br> **4**.
-///доступного остатка для вывода средств.
+///доступного остатка для вывода средств;</br> **5**. получения различных отчётов.
 ///
 /// To build a server, implement a class that conforms to this protocol.
 public protocol OperationsServiceProvider: CallHandlerProvider {
@@ -189,6 +364,15 @@ public protocol OperationsServiceProvider: CallHandlerProvider {
 
   ///Метод получения доступного остатка для вывода средств.
   func getWithdrawLimits(request: WithdrawLimitsRequest, context: StatusOnlyCallContext) -> EventLoopFuture<WithdrawLimitsResponse>
+
+  ///Метод получения брокерского отчёта.
+  func getBrokerReport(request: BrokerReportRequest, context: StatusOnlyCallContext) -> EventLoopFuture<BrokerReportResponse>
+
+  ///Метод получения отчёта "Справка о доходах за пределами РФ".
+  func getDividendsForeignIssuer(request: GetDividendsForeignIssuerRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetDividendsForeignIssuerResponse>
+
+  ///Метод получения списка операций по счёту с пагинацией.
+  func getOperationsByCursor(request: GetOperationsByCursorRequest, context: StatusOnlyCallContext) -> EventLoopFuture<GetOperationsByCursorResponse>
 }
 
 extension OperationsServiceProvider {
@@ -237,6 +421,33 @@ extension OperationsServiceProvider {
         userFunction: self.getWithdrawLimits(request:context:)
       )
 
+    case "GetBrokerReport":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<BrokerReportRequest>(),
+        responseSerializer: ProtobufSerializer<BrokerReportResponse>(),
+        interceptors: self.interceptors?.makeGetBrokerReportInterceptors() ?? [],
+        userFunction: self.getBrokerReport(request:context:)
+      )
+
+    case "GetDividendsForeignIssuer":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetDividendsForeignIssuerRequest>(),
+        responseSerializer: ProtobufSerializer<GetDividendsForeignIssuerResponse>(),
+        interceptors: self.interceptors?.makeGetDividendsForeignIssuerInterceptors() ?? [],
+        userFunction: self.getDividendsForeignIssuer(request:context:)
+      )
+
+    case "GetOperationsByCursor":
+      return UnaryServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<GetOperationsByCursorRequest>(),
+        responseSerializer: ProtobufSerializer<GetOperationsByCursorResponse>(),
+        interceptors: self.interceptors?.makeGetOperationsByCursorInterceptors() ?? [],
+        userFunction: self.getOperationsByCursor(request:context:)
+      )
+
     default:
       return nil
     }
@@ -260,4 +471,71 @@ public protocol OperationsServiceServerInterceptorFactoryProtocol {
   /// - Returns: Interceptors to use when handling 'getWithdrawLimits'.
   ///   Defaults to calling `self.makeInterceptors()`.
   func makeGetWithdrawLimitsInterceptors() -> [ServerInterceptor<WithdrawLimitsRequest, WithdrawLimitsResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getBrokerReport'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetBrokerReportInterceptors() -> [ServerInterceptor<BrokerReportRequest, BrokerReportResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getDividendsForeignIssuer'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetDividendsForeignIssuerInterceptors() -> [ServerInterceptor<GetDividendsForeignIssuerRequest, GetDividendsForeignIssuerResponse>]
+
+  /// - Returns: Interceptors to use when handling 'getOperationsByCursor'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makeGetOperationsByCursorInterceptors() -> [ServerInterceptor<GetOperationsByCursorRequest, GetOperationsByCursorResponse>]
+}
+/// To build a server, implement a class that conforms to this protocol.
+public protocol OperationsStreamServiceProvider: CallHandlerProvider {
+  var interceptors: OperationsStreamServiceServerInterceptorFactoryProtocol? { get }
+
+  ///Server-side stream обновлений портфеля
+  func portfolioStream(request: PortfolioStreamRequest, context: StreamingResponseCallContext<PortfolioStreamResponse>) -> EventLoopFuture<GRPCStatus>
+
+  ///Server-side stream обновлений информации по изменению позиций портфеля
+  func positionsStream(request: PositionsStreamRequest, context: StreamingResponseCallContext<PositionsStreamResponse>) -> EventLoopFuture<GRPCStatus>
+}
+
+extension OperationsStreamServiceProvider {
+  public var serviceName: Substring { return "tinkoff.public.invest.api.contract.v1.OperationsStreamService" }
+
+  /// Determines, calls and returns the appropriate request handler, depending on the request's method.
+  /// Returns nil for methods not handled by this service.
+  public func handle(
+    method name: Substring,
+    context: CallHandlerContext
+  ) -> GRPCServerHandlerProtocol? {
+    switch name {
+    case "PortfolioStream":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<PortfolioStreamRequest>(),
+        responseSerializer: ProtobufSerializer<PortfolioStreamResponse>(),
+        interceptors: self.interceptors?.makePortfolioStreamInterceptors() ?? [],
+        userFunction: self.portfolioStream(request:context:)
+      )
+
+    case "PositionsStream":
+      return ServerStreamingServerHandler(
+        context: context,
+        requestDeserializer: ProtobufDeserializer<PositionsStreamRequest>(),
+        responseSerializer: ProtobufSerializer<PositionsStreamResponse>(),
+        interceptors: self.interceptors?.makePositionsStreamInterceptors() ?? [],
+        userFunction: self.positionsStream(request:context:)
+      )
+
+    default:
+      return nil
+    }
+  }
+}
+
+public protocol OperationsStreamServiceServerInterceptorFactoryProtocol {
+
+  /// - Returns: Interceptors to use when handling 'portfolioStream'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePortfolioStreamInterceptors() -> [ServerInterceptor<PortfolioStreamRequest, PortfolioStreamResponse>]
+
+  /// - Returns: Interceptors to use when handling 'positionsStream'.
+  ///   Defaults to calling `self.makeInterceptors()`.
+  func makePositionsStreamInterceptors() -> [ServerInterceptor<PositionsStreamRequest, PositionsStreamResponse>]
 }
