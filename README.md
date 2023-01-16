@@ -86,7 +86,7 @@ dependencies: [
 Add the following line to your `Podfile`:
 
 ```text
-pod 'TinkoffInvestSwiftSDK', :git => "https://github.com/JohnReeze/TinkoffInvestSwiftSDK.git", :tag => "0.5.0"
+pod 'TinkoffInvestSDK', :git => "https://github.com/JohnReeze/TinkoffInvestSwiftSDK.git", :tag => "0.5.0"
 ```
 
 ## Compatibility
